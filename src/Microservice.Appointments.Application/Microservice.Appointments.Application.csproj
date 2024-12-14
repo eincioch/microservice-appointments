@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Microservice.Appointments.Domain\Microservice.Appointments.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+    <Folder Include="UseCases\Mappers\Abstractions\" />
+    <Folder Include="UseCases\Mappers\" />
+  </ItemGroup>
+
 </Project>

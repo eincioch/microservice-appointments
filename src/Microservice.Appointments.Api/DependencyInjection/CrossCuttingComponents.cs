@@ -5,7 +5,7 @@ namespace Microservice.Appointments.Api.DependencyInjection;
 
 public static partial class DependencyInjection
 {
-    public static IServiceCollection AddCrossCuttingServices(this IServiceCollection services)
+    public static IServiceCollection AddCrossCuttingComponents(this IServiceCollection services)
     {
         services.AddTransient<IExceptionToHttpMapper, ExceptionToHttpMapper>();
 

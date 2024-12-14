@@ -3,8 +3,14 @@ using Microservice.Appointments.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddControllers();
-builder.Services.AddCrossCuttingServices();
+builder.Services.AddUseCases();
+builder.Services.AddMappers();
+builder.Services.AddRepositories();
+
+builder.Services.AddCrossCuttingComponents();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

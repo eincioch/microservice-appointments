@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Microservice.Appointments.Application\Microservice.Appointments.Application.csproj" />
     <ProjectReference Include="..\Microservice.Appointments.CrossCutting\Microservice.Appointments.CrossCutting.csproj" />
+    <ProjectReference Include="..\Microservice.Appointments.Infrastructure\Microservice.Appointments.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

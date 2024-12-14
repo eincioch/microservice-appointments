@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Microservice.Appointments.Application\Microservice.Appointments.Application.csproj" />
+  </ItemGroup>
+
 </Project>
