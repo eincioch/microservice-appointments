@@ -1,0 +1,6 @@
+#Base URL
+@Microservice.Appointments.Api_HostAddress = http://localhost:5281
+
+### Get all appointments
+GET {{Microservice.Appointments.Api_HostAddress}}/appointments/
+Accept: application/json
