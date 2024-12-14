@@ -1,4 +1,5 @@
 using Microservice.Appointments.Api.DependencyInjection;
+using Microservice.Appointments.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<Microservice.Appointments.Api.Middlewares.ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseAuthorization();
 

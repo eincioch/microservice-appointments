@@ -7,7 +7,7 @@ public static partial class DependencyInjection
 {
     public static IServiceCollection AddCrossCuttingServices(this IServiceCollection services)
     {
-        services.AddScoped<IExceptionToHttpMapper, ExceptionToHttpMapper>();
+        services.AddTransient<IExceptionToHttpMapper, ExceptionToHttpMapper>();
 
         return services;
     }
