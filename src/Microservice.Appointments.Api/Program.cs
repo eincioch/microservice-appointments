@@ -12,6 +12,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<Microservice.Appointments.Api.Middlewares.ExceptionMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();
