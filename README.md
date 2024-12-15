@@ -53,16 +53,31 @@ The Appointments Microservice is a **testing playground** disguised as a backend
 
 3. **Set up and run the solutions**:
 
-   - **Main Solution**: 
-     1. Open `Microservice.Appointments.sln` in Visual Studio or your preferred IDE.
-     2. Set `Microservice.Appointments.Api` as the startup project.
-     3. Run the project to host the API locally (by default on `http://localhost:[port]`).
+#### **Main Solution**: 
+  1. Open `Microservice.Appointments.sln` in Visual Studio or your preferred IDE.
+  2. Set `Microservice.Appointments.Api` as the startup project.
+  3. Ensure Docker is running to support the EventBus (RabbitMQ) and Database (SQL Server) containers.
+  4. Run the project to host the API locally (by default on `http://localhost:[port]`).
 
-   - **IntegrityAssurance Solution**: 
-     1. Open `Microservice.Appointments.IntegrityAssurance.sln`.
-     2. Navigate to the `Microservice.Appointments.IntegrationTests` project.
-     3. Execute tests and have fun.
-	 
+#### **IntegrityAssurance Solution**: 
+  1. Open `Microservice.Appointments.IntegrityAssurance.sln`.
+  2. Navigate to the `Microservice.Appointments.IntegrationTests` project.
+  3. Ensure the `Microservice.Appointments.Api` is running in **IntegrityAssurance mode**.
+  4. Execute the tests and validate the workflows.
+
+---
+
+## 🐳 Docker Containers
+
+This project uses **Docker** to simplify the infrastructure setup. Make sure Docker is running, and the app will handle everything for you automatically.  
+
+Take a coffee ☕ and relax while the app spins up the containers. Here's what's included:
+
+1. **EventBus (RabbitMQ):** Handles asynchronous messaging for domain events like `AppointmentCreatedEvent`.  
+2. **Database (SQL Server):** Stores appointment data and ensures persistence for the service.  
+
+Everything is pre-configured and ready to go. Just hit "Run" and start testing! 😎
+
 ---
 
 ## 📂 How It’s Organized
