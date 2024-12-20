@@ -7,8 +7,8 @@ namespace Microservice.Appointments.Application.UseCases;
 
 public class GetAppointmentsUseCase(IAppointmentRepository appointmentRepository, IAppointmentMapper appointmentMapper) : IGetAppointmentsUseCase
 {
-    private readonly IAppointmentRepository _appointmentRepository = appointmentRepository;
-    private readonly IAppointmentMapper _appointmentMapper = appointmentMapper;
+    private readonly IAppointmentRepository _appointmentRepository = appointmentRepository ?? throw new ArgumentNullException(nameof(appointmentRepository));
+    private readonly IAppointmentMapper _appointmentMapper = appointmentMapper ?? throw new ArgumentNullException(nameof(appointmentMapper));
 
     public async Task<IEnumerable<AppointmentDto>> ExecuteAsync()
     {

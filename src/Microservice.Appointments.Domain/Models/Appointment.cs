@@ -4,7 +4,9 @@ namespace Microservice.Appointments.Domain.Models;
 
 public class Appointment
 {
-    public Guid Id { get; }
+    private const int UnassignedId = 0;
+
+    public int Id { get; private set; }
     public string Title { get; private set; }
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
@@ -15,7 +17,6 @@ public class Appointment
     {
         ValidateDates(startTime, endTime);
 
-        Id = Guid.NewGuid();
         Title = title;
         StartTime = startTime;
         EndTime = endTime;
@@ -23,10 +24,22 @@ public class Appointment
         Status = AppointmentStatus.Scheduled;
     }
 
+    public void AssignId(int id)
+    {
+        if (id <= UnassignedId)
+            throw new ArgumentException($"Appointment id must be greater than {UnassignedId}. Provided value: {id}", nameof(id));
+
+        if (Id != UnassignedId)
+            throw new InvalidOperationException($"Appointment Id has already been assigned for this appointment. Current ID: {Id}");
+
+        Id = id;
+    }
+
+
     public void Complete()
     {
         if (Status == AppointmentStatus.Completed)
-            throw new InvalidOperationException($"{nameof(Appointment)} with ID {Id} is already {AppointmentStatus.Completed}.");
+            throw new InvalidOperationException($"Appointment with ID {Id} is already {AppointmentStatus.Completed}.");
 
         Status = AppointmentStatus.Completed;
     }
@@ -34,7 +47,7 @@ public class Appointment
     public void Cancel()
     {
         if (Status == AppointmentStatus.Canceled)
-            throw new InvalidOperationException($"{nameof(Appointment)} with ID {Id} is already {AppointmentStatus.Canceled}.");
+            throw new InvalidOperationException($"Appointment with ID {Id} is already {AppointmentStatus.Canceled}.");
 
         Status = AppointmentStatus.Canceled;
     }
