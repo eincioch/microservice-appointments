@@ -8,6 +8,7 @@ public static partial class DependencyInjection
     public static IServiceCollection AddUseCases(this IServiceCollection services)
     {
         services.AddScoped<IGetAppointmentsUseCase, GetAppointmentsUseCase>();
+        services.AddScoped<IGetAppointmentByIdUseCase, GetAppointmentByIdUseCase>();
 
         return services;
     }

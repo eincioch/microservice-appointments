@@ -21,5 +21,3 @@ public class GetAppointmentsUseCase(IAppointmentRepository appointmentRepository
         return appointmentDtos;
     }
 }
-
-
