@@ -14,12 +14,14 @@ public class GetAppointmentsUseCaseTests
 {
     private const int InitialValue = 0;
     private const int AppointmentCount = 3;
+    private const int DaysInPast = -1;
+    private const int DaysInFuture = 1;
 
     #region Builder
 
     private class Builder
     {
-        public Fixture Fixture { get; } = new Fixture();
+        public Fixture Fixture { get; } = new();
         public Mock<IAppointmentRepository> MockRepository { get; } = new();
         public Mock<IAppointmentMapper> MockMapper { get; } = new();
 
@@ -35,8 +37,8 @@ public class GetAppointmentsUseCaseTests
                     .Select(_ => AppointmentDomain.Hydrate(
                         Fixture.Create<int>(),
                         Fixture.Create<string>(),
-                        DateTime.UtcNow.AddDays(-1),
-                        DateTime.UtcNow.AddDays(1),
+                        DateTime.UtcNow.AddDays(DaysInPast),
+                        DateTime.UtcNow.AddDays(DaysInFuture),
                         Fixture.Create<string>(),
                         Fixture.Create<AppointmentStatus>()
                     ))

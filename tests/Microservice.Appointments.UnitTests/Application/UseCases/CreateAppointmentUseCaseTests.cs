@@ -18,6 +18,9 @@ public class CreateAppointmentUseCaseTests
 {
     private const string ValidationErrorMessage = "Validation error occurred while creating an appointment.";
     private const string EventBusFailureMessage = "Event bus failure";
+    private const int DaysInPast = -1;
+    private const int DaysInFuture = 1;
+    private const int HoursToAdd = 1;
 
     #region Builder
 
@@ -42,8 +45,8 @@ public class CreateAppointmentUseCaseTests
             => AppointmentDomain.Hydrate(
                 Fixture.Create<int>(),
                 Fixture.Create<string>(),
-                DateTime.UtcNow.AddDays(-1),
-                DateTime.UtcNow.AddDays(1),
+                DateTime.UtcNow.AddDays(DaysInPast),
+                DateTime.UtcNow.AddDays(DaysInFuture),
                 Fixture.Create<string>(),
                 Fixture.Create<AppointmentStatus>()
             );
@@ -106,7 +109,7 @@ public class CreateAppointmentUseCaseTests
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
-            useCase.ExecuteAsync(builder.Fixture.Create<string>(), DateTime.UtcNow, DateTime.UtcNow.AddHours(1), builder.Fixture.Create<string>()));
+            useCase.ExecuteAsync(builder.Fixture.Create<string>(), DateTime.UtcNow, DateTime.UtcNow.AddHours(HoursToAdd), builder.Fixture.Create<string>()));
 
         Assert.Equal(ValidationErrorMessage, exception.Message);
 
@@ -140,7 +143,7 @@ public class CreateAppointmentUseCaseTests
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<Exception>(() =>
-            useCase.ExecuteAsync(builder.Fixture.Create<string>(), DateTime.UtcNow, DateTime.UtcNow.AddHours(1), builder.Fixture.Create<string>()));
+            useCase.ExecuteAsync(builder.Fixture.Create<string>(), DateTime.UtcNow, DateTime.UtcNow.AddHours(HoursToAdd), builder.Fixture.Create<string>()));
 
         Assert.Equal(EventBusFailureMessage, exception.Message);
     }

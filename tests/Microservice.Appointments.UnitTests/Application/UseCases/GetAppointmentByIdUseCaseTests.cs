@@ -14,6 +14,8 @@ namespace Microservice.Appointments.UnitTests.Application.UseCases;
 public class GetAppointmentByIdUseCaseTests
 {
     private const int InvalidId = -1;
+    private const int DaysInPast = -1;
+    private const int DaysInFuture = 1;
 
     #region Builder
 
@@ -32,8 +34,8 @@ public class GetAppointmentByIdUseCaseTests
             => AppointmentDomain.Hydrate(
                 Fixture.Create<int>(),
                 Fixture.Create<string>(),
-                DateTime.UtcNow.AddDays(-1),
-                DateTime.UtcNow.AddDays(1),
+                DateTime.UtcNow.AddDays(DaysInPast),
+                DateTime.UtcNow.AddDays(DaysInFuture),
                 Fixture.Create<string>(),
                 Fixture.Create<AppointmentStatus>()
             );

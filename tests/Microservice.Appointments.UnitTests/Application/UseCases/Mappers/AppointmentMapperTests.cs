@@ -8,12 +8,20 @@ namespace Microservice.Appointments.UnitTests.Application.UseCases.Mappers;
 
 public class AppointmentMapperTests
 {
+    private const int DaysInPast = -1;
+    private const int DaysInFuture = 1;
+
     private readonly Fixture _fixture = new();
 
     private static AppointmentDomain CreateDomain(Fixture fixture)
-    {
-        return AppointmentDomain.Hydrate(fixture.Create<int>(), fixture.Create<string>(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), fixture.Create<string>(), fixture.Create<AppointmentStatus>());
-    }
+        => AppointmentDomain.Hydrate(
+            fixture.Create<int>(),
+            fixture.Create<string>(),
+            DateTime.UtcNow.AddDays(DaysInPast),
+            DateTime.UtcNow.AddDays(DaysInFuture),
+            fixture.Create<string>(),
+            fixture.Create<AppointmentStatus>()
+        );
 
     [Fact]
     public void Given_AppointmentDomain_When_ToDtoIsCalled_Then_ReturnsCorrectAppointmentDto()

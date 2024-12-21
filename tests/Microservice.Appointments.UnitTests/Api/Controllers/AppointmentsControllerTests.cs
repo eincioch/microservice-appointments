@@ -15,7 +15,7 @@ public class AppointmentsControllerTests
 
     private class Builder
     {
-        public Fixture Fixture { get; private set; }
+        public Fixture Fixture { get; }
         public const string ControllerName = "Appointments";
 
         public Builder()
@@ -91,7 +91,7 @@ public class AppointmentsControllerTests
         );
 
         // Act
-        var result = await controller.GetById(1);
+        var result = await controller.GetById(builder.Fixture.Create<int>());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
