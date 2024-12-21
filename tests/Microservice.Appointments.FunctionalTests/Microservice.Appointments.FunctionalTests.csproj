@@ -17,4 +17,9 @@
     <PackageReference Include="Moq" Version="4.20.72" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Microservice.Appointments.Api\Microservice.Appointments.Api.csproj" />
+    <ProjectReference Include="..\..\src\Microservice.Appointments.Application\Microservice.Appointments.Application.csproj" />
+  </ItemGroup>
+
 </Project>
