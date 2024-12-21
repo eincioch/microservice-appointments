@@ -1,4 +1,4 @@
-﻿namespace Microservice.Appointments.CrossCutting.Mappers.Abstractions;
+﻿namespace Microservice.Appointments.Api.Mappers.Abstractions;
 
 public interface IExceptionToHttpMapper
 {

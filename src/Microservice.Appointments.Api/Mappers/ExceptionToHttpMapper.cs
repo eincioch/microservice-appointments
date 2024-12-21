@@ -1,9 +1,8 @@
-﻿using Microservice.Appointments.CrossCutting.Mappers.Abstractions;
+﻿using Microservice.Appointments.Api.Mappers.Abstractions;
 using Microservice.Appointments.Domain.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Microservice.Appointments.CrossCutting.Mappers;
+namespace Microservice.Appointments.Api.Mappers;
 
 public class ExceptionToHttpMapper : IExceptionToHttpMapper
 {

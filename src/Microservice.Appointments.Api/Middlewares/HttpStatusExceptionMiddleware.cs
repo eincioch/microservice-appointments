@@ -1,5 +1,5 @@
 ﻿using System.Net.Mime;
-using Microservice.Appointments.CrossCutting.Mappers.Abstractions;
+using Microservice.Appointments.Api.Mappers.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservice.Appointments.Api.Middlewares;

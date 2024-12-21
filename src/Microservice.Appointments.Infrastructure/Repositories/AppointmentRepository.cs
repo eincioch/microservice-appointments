@@ -5,26 +5,25 @@ namespace Microservice.Appointments.Infrastructure.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {
-        //TODO: Get Rid of this hardcoded data
-        Appointment mockedAppointment = new Appointment("Sample Title", DateTime.UtcNow, DateTime.UtcNow.AddHours(1), "Sample Description");
+        //TODO: Use Entity Mappers here when EF Core is implemented
+        AppointmentDomain _mockedAppointmentDomain = new AppointmentDomain("Sample Title", DateTime.UtcNow, DateTime.UtcNow.AddHours(1), "Sample Description");
 
-        public async Task<IEnumerable<Appointment>> GetAsync()
+        public async Task<IEnumerable<AppointmentDomain>> GetAsync()
         {
-            return await Task.FromResult<IEnumerable<Appointment>>(new List<Appointment>
+            return await Task.FromResult<IEnumerable<AppointmentDomain>>(new List<AppointmentDomain>
             {
-                mockedAppointment
+                _mockedAppointmentDomain
             });
         }
 
-        public async Task<Appointment> GetAsync(int id)
+        public async Task<AppointmentDomain> GetAsync(int id)
         {
-            //TODO: Get Rid of this hardcoded data
-            return await Task.FromResult(mockedAppointment);
+            return await Task.FromResult(_mockedAppointmentDomain);
         }
 
-        public async Task<Appointment> AddAsync(Appointment appointment)
+        public async Task<AppointmentDomain> AddAsync(AppointmentDomain appointmentDomain)
         {
-            return await Task.FromResult(mockedAppointment);
+            return await Task.FromResult(_mockedAppointmentDomain);
         }
     }
 }

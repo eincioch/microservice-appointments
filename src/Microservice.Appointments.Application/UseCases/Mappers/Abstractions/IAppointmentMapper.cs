@@ -6,6 +6,6 @@ namespace Microservice.Appointments.Application.UseCases.Mappers.Abstractions;
 
 public interface IAppointmentMapper
 {
-    AppointmentDto ToDto(Appointment appointment);
-    AppointmentCreatedEvent ToAppointmentCreatedMessage(Appointment appointment);
+    AppointmentDto ToDto(AppointmentDomain appointmentDomain);
+    AppointmentCreatedEvent ToAppointmentCreatedMessage(AppointmentDomain appointmentDomain);
 }

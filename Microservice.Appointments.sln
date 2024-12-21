@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C6F2442C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5C69DC2C-EC9A-48A9-A924-419C45BA6C7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservice.Appointments.CrossCutting", "src\Microservice.Appointments.CrossCutting\Microservice.Appointments.CrossCutting.csproj", "{63F8D140-B8A5-4F60-869F-8C379E7A4ED3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,10 +49,6 @@ Global
 		{607CAE21-2F6D-43B1-938C-A27928EFD074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{607CAE21-2F6D-43B1-938C-A27928EFD074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{607CAE21-2F6D-43B1-938C-A27928EFD074}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63F8D140-B8A5-4F60-869F-8C379E7A4ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63F8D140-B8A5-4F60-869F-8C379E7A4ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63F8D140-B8A5-4F60-869F-8C379E7A4ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63F8D140-B8A5-4F60-869F-8C379E7A4ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +60,5 @@ Global
 		{08C2F34B-CDC8-48B0-8A1D-B8A8695C9D46} = {5C69DC2C-EC9A-48A9-A924-419C45BA6C7F}
 		{279C4073-7F2D-4020-8F83-F62ED80B437E} = {C6F2442C-B072-43A9-B4CE-CC36A9F0B7DD}
 		{607CAE21-2F6D-43B1-938C-A27928EFD074} = {C6F2442C-B072-43A9-B4CE-CC36A9F0B7DD}
-		{63F8D140-B8A5-4F60-869F-8C379E7A4ED3} = {5C69DC2C-EC9A-48A9-A924-419C45BA6C7F}
 	EndGlobalSection
 EndGlobal

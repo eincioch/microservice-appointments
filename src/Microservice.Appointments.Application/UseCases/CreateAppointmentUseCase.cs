@@ -28,7 +28,7 @@ public class CreateAppointmentUseCase(
     {
         try
         {
-            var appointment = new Appointment(title, startTime, endTime, description);
+            var appointment = new AppointmentDomain(title, startTime, endTime, description);
 
             var appointmentEntity = await _appointmentRepository.AddAsync(appointment);
             appointment.AssignId(appointmentEntity.Id);

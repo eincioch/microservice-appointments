@@ -3,7 +3,7 @@ using Microservice.Appointments.Domain.Exceptions;
 
 namespace Microservice.Appointments.Domain.Models;
 
-public class Appointment
+public class AppointmentDomain
 {
     private const int UnassignedId = 0;
 
@@ -14,7 +14,7 @@ public class Appointment
     public string Description { get; private set; }
     public AppointmentStatus Status { get; private set; }
 
-    public Appointment(string title, DateTime startTime, DateTime endTime, string description)
+    public AppointmentDomain(string title, DateTime startTime, DateTime endTime, string description)
     {
         ValidateTitle(title);
         ValidateDates(startTime, endTime);
@@ -24,6 +24,19 @@ public class Appointment
         EndTime = endTime;
         Description = description;
         Status = AppointmentStatus.Scheduled;
+    }
+
+    /// <summary>
+    /// Constructor for hydrating an existing appointment when fetching.
+    /// </summary>
+    private AppointmentDomain(int id, string title, DateTime startTime, DateTime endTime, string description, AppointmentStatus status)
+    {
+        Id = id;
+        Title = title;
+        StartTime = startTime;
+        EndTime = endTime;
+        Description = description;
+        Status = status;
     }
 
     public void AssignId(int id)
@@ -64,4 +77,12 @@ public class Appointment
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainValidationException($"{nameof(title)} cannot be null or empty.");
     }
+
+    /// <summary>
+    /// Hydrates an appointment domain object from persisted data.
+    /// Uses the internal constructor to initialize the instance.
+    /// </summary>
+    /// <returns>Fully initialized <see cref="AppointmentDomain"/> instance.</returns>
+    public static AppointmentDomain Hydrate(int id, string title, DateTime startTime, DateTime endTime, string description, AppointmentStatus status)
+        => new(id, title, startTime, endTime, description, status);
 }

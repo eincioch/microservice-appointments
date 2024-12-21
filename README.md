@@ -90,7 +90,6 @@ This app keeps things clean, testable, and easy to automate:
 /src
 ├── Api               # Your API controllers, middlewares
 ├── Application       # Use cases, DTOs, and services
-├── CrossCutting      # Shared configurations, utilities, and exceptions
 ├── Domain            # Core business logic like entities and events
 ├── Infrastructure    # Database, repositories, and external integrations
 /tests

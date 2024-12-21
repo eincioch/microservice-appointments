@@ -12,8 +12,6 @@ builder.Services.AddEvents(builder.Configuration);
 builder.Services.AddMappers();
 builder.Services.AddRepositories();
 
-builder.Services.AddCrossCuttingComponents();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

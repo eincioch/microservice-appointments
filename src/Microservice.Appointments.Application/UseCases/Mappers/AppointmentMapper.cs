@@ -7,23 +7,23 @@ namespace Microservice.Appointments.Application.UseCases.Mappers;
 
 public class AppointmentMapper : IAppointmentMapper
 {
-    public AppointmentDto ToDto(Appointment appointment)
+    public AppointmentDto ToDto(AppointmentDomain appointmentDomain)
         => new(
-            appointment.Id,
-            appointment.Title,
-            appointment.StartTime,
-            appointment.EndTime,
-            appointment.Description,
-            appointment.Status
+            appointmentDomain.Id,
+            appointmentDomain.Title,
+            appointmentDomain.StartTime,
+            appointmentDomain.EndTime,
+            appointmentDomain.Description,
+            appointmentDomain.Status
         );
 
-    public AppointmentCreatedEvent ToAppointmentCreatedMessage(Appointment appointment)
+    public AppointmentCreatedEvent ToAppointmentCreatedMessage(AppointmentDomain appointmentDomain)
         => new(
-            appointment.Id,
-            appointment.Title,
-            appointment.StartTime,
-            appointment.EndTime,
-            appointment.Description,
-            appointment.Status
+            appointmentDomain.Id,
+            appointmentDomain.Title,
+            appointmentDomain.StartTime,
+            appointmentDomain.EndTime,
+            appointmentDomain.Description,
+            appointmentDomain.Status
         );
 }
