@@ -1,5 +1,6 @@
 using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Application.UseCases.Mappers.Abstractions;
+using Microservice.Appointments.Domain.Events;
 using Microservice.Appointments.Domain.Models;
 
 namespace Microservice.Appointments.Application.UseCases.Mappers;
@@ -7,8 +8,7 @@ namespace Microservice.Appointments.Application.UseCases.Mappers;
 public class AppointmentMapper : IAppointmentMapper
 {
     public AppointmentDto ToDto(Appointment appointment)
-    {
-        return new AppointmentDto(
+        => new(
             appointment.Id,
             appointment.Title,
             appointment.StartTime,
@@ -16,5 +16,14 @@ public class AppointmentMapper : IAppointmentMapper
             appointment.Description,
             appointment.Status
         );
-    }
+
+    public AppointmentCreatedEvent ToAppointmentCreatedMessage(Appointment appointment)
+        => new(
+            appointment.Id,
+            appointment.Title,
+            appointment.StartTime,
+            appointment.EndTime,
+            appointment.Description,
+            appointment.Status
+        );
 }

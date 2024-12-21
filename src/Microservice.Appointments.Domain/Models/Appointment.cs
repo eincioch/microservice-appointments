@@ -1,4 +1,5 @@
 ﻿using Microservice.Appointments.Domain.Enums;
+using Microservice.Appointments.Domain.Exceptions;
 
 namespace Microservice.Appointments.Domain.Models;
 
@@ -15,6 +16,7 @@ public class Appointment
 
     public Appointment(string title, DateTime startTime, DateTime endTime, string description)
     {
+        ValidateTitle(title);
         ValidateDates(startTime, endTime);
 
         Title = title;
@@ -27,19 +29,18 @@ public class Appointment
     public void AssignId(int id)
     {
         if (id <= UnassignedId)
-            throw new ArgumentException($"Appointment id must be greater than {UnassignedId}. Provided value: {id}", nameof(id));
+            throw new DomainValidationException($"Appointment id must be greater than {UnassignedId}. Provided value: {id}");
 
         if (Id != UnassignedId)
-            throw new InvalidOperationException($"Appointment Id has already been assigned for this appointment. Current ID: {Id}");
+            throw new DomainValidationException($"Appointment Id has already been assigned for this appointment. Current ID: {Id}");
 
         Id = id;
     }
 
-
     public void Complete()
     {
         if (Status == AppointmentStatus.Completed)
-            throw new InvalidOperationException($"Appointment with ID {Id} is already {AppointmentStatus.Completed}.");
+            throw new DomainValidationException($"Appointment with ID {Id} is already {AppointmentStatus.Completed}.");
 
         Status = AppointmentStatus.Completed;
     }
@@ -47,7 +48,7 @@ public class Appointment
     public void Cancel()
     {
         if (Status == AppointmentStatus.Canceled)
-            throw new InvalidOperationException($"Appointment with ID {Id} is already {AppointmentStatus.Canceled}.");
+            throw new DomainValidationException($"Appointment with ID {Id} is already {AppointmentStatus.Canceled}.");
 
         Status = AppointmentStatus.Canceled;
     }
@@ -55,6 +56,12 @@ public class Appointment
     private static void ValidateDates(DateTime startTime, DateTime endTime)
     {
         if (startTime >= endTime)
-            throw new ArgumentException($"{nameof(startTime)} ({startTime}) must be earlier than {nameof(endTime)} ({endTime}).");
+            throw new DomainValidationException($"{nameof(startTime)} ({startTime}) must be earlier than {nameof(endTime)} ({endTime}).");
+    }
+
+    private static void ValidateTitle(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            throw new DomainValidationException($"{nameof(title)} cannot be null or empty.");
     }
 }

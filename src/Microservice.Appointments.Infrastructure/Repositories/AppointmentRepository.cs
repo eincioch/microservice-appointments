@@ -21,5 +21,10 @@ namespace Microservice.Appointments.Infrastructure.Repositories
             //TODO: Get Rid of this hardcoded data
             return await Task.FromResult(mockedAppointment);
         }
+
+        public async Task<Appointment> AddAsync(Appointment appointment)
+        {
+            return await Task.FromResult(mockedAppointment);
+        }
     }
 }
