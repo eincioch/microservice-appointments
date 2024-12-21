@@ -40,9 +40,6 @@ public class AppointmentsController(IGetAppointmentsUseCase appointmentsUseCase,
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Create(string title, DateTime startTime, DateTime endTime, string description)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         var appointment = await _createAppointmentUseCase.ExecuteAsync(title, startTime, endTime, description);
         return ActionResultHelper.Created(nameof(GetById), ControllerContext.ActionDescriptor.ControllerName, appointment.Id, appointment);
     }
