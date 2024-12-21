@@ -5,6 +5,7 @@ namespace Microservice.Appointments.Domain.Models;
 
 public class AppointmentDomain
 {
+    private const int MinimumAllowedId = 1;
     private const int UnassignedId = 0;
 
     public int Id { get; private set; }
@@ -41,11 +42,11 @@ public class AppointmentDomain
 
     public void AssignId(int id)
     {
-        if (id <= UnassignedId)
-            throw new DomainValidationException($"Appointment id must be greater than {UnassignedId}. Provided value: {id}");
+        if (id < MinimumAllowedId)
+            throw new DomainValidationException($"Appointment id must be greater than or equal to {MinimumAllowedId}. Provided value: {id}");
 
         if (Id != UnassignedId)
-            throw new DomainValidationException($"Appointment Id has already been assigned for this appointment. Current ID: {Id}");
+            throw new DomainValidationException($"Appointment id has already been assigned. Current id: {Id}");
 
         Id = id;
     }
