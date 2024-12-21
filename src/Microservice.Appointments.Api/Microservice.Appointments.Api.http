@@ -1,6 +1,22 @@
-#Base URL
+# Base URL
 @Microservice.Appointments.Api_HostAddress = http://localhost:5281
 
 ### Get all appointments
 GET {{Microservice.Appointments.Api_HostAddress}}/appointments/
 Accept: application/json
+
+### Get appointment by ID
+GET {{Microservice.Appointments.Api_HostAddress}}/appointments/{{id}}
+Accept: application/json
+
+### Create a new appointment
+POST {{Microservice.Appointments.Api_HostAddress}}/appointments/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Sample Appointment",
+  "startTime": "2024-01-01T10:00:00Z",
+  "endTime": "2024-01-01T11:00:00Z",
+  "description": "This is a sample description"
+}
