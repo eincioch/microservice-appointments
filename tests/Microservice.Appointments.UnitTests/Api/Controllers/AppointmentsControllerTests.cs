@@ -29,13 +29,15 @@ public class AppointmentsControllerTests
             Mock<IGetAppointmentsUseCase> getAppointmentsUseCase,
             Mock<IGetAppointmentByIdUseCase> getAppointmentByIdUseCase,
             Mock<ICreateAppointmentUseCase> createAppointmentUseCase,
-            Mock<IUpdateAppointmentUseCase> updateAppointmentUseCase)
+            Mock<IUpdateAppointmentUseCase> updateAppointmentUseCase,
+            Mock<IUpdateAppointmentStatusUseCase> updateAppointmentStatusUseCase)
         {
             return new AppointmentsController(
                 getAppointmentsUseCase.Object,
                 getAppointmentByIdUseCase.Object,
                 createAppointmentUseCase.Object,
-                updateAppointmentUseCase.Object
+                updateAppointmentUseCase.Object,
+                updateAppointmentStatusUseCase.Object
             )
             {
                 ControllerContext = new ControllerContext
@@ -66,7 +68,8 @@ public class AppointmentsControllerTests
             mockGetAppointmentsUseCase,
             new Mock<IGetAppointmentByIdUseCase>(),
             new Mock<ICreateAppointmentUseCase>(),
-            new Mock<IUpdateAppointmentUseCase>()
+            new Mock<IUpdateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentStatusUseCase>()
         );
 
         // Act
@@ -92,7 +95,8 @@ public class AppointmentsControllerTests
             new Mock<IGetAppointmentsUseCase>(),
             mockGetAppointmentByIdUseCase,
             new Mock<ICreateAppointmentUseCase>(),
-            new Mock<IUpdateAppointmentUseCase>()
+            new Mock<IUpdateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentStatusUseCase>()
         );
 
         // Act
@@ -119,7 +123,8 @@ public class AppointmentsControllerTests
             new Mock<IGetAppointmentsUseCase>(),
             new Mock<IGetAppointmentByIdUseCase>(),
             mockCreateAppointmentUseCase,
-            new Mock<IUpdateAppointmentUseCase>()
+            new Mock<IUpdateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentStatusUseCase>()
         );
 
         // Act
@@ -145,15 +150,44 @@ public class AppointmentsControllerTests
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<AppointmentStatus>()))
             .ReturnsAsync(appointment);
 
-        var controller = new AppointmentsController(
-            new Mock<IGetAppointmentsUseCase>().Object,
-            new Mock<IGetAppointmentByIdUseCase>().Object,
-            new Mock<ICreateAppointmentUseCase>().Object,
-            mockUpdateAppointmentUseCase.Object
+        var controller = builder.Build(
+            new Mock<IGetAppointmentsUseCase>(),
+            new Mock<IGetAppointmentByIdUseCase>(),
+            new Mock<ICreateAppointmentUseCase>(),
+            mockUpdateAppointmentUseCase,
+            new Mock<IUpdateAppointmentStatusUseCase>()
         );
 
         // Act
         var result = await controller.Update(appointment.Id, appointment.Title, appointment.StartTime, appointment.EndTime, appointment.Description, AppointmentStatus.Scheduled);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(appointment, okResult.Value);
+    }
+
+    [Fact]
+    public async Task Given_Valid_Id_And_Status_When_UpdateStatus_Then_Returns_Ok()
+    {
+        // Arrange
+        var builder = new Builder();
+        var mockUpdateAppointmentStatusUseCase = new Mock<IUpdateAppointmentStatusUseCase>();
+
+        var appointment = builder.Fixture.Create<AppointmentDto>();
+        mockUpdateAppointmentStatusUseCase
+            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<int>(), It.IsAny<AppointmentStatus>()))
+            .ReturnsAsync(appointment);
+
+        var controller = builder.Build(
+            new Mock<IGetAppointmentsUseCase>(),
+            new Mock<IGetAppointmentByIdUseCase>(),
+            new Mock<ICreateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentUseCase>(),
+            mockUpdateAppointmentStatusUseCase
+        );
+
+        // Act
+        var result = await controller.UpdateStatus(appointment.Id, AppointmentStatus.Completed);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);

@@ -80,7 +80,7 @@ public class AppointmentDomain
         Status = AppointmentStatus.Canceled;
     }
 
-    private void UpdateStatus(AppointmentStatus status)
+    public void UpdateStatus(AppointmentStatus status)
     {
         if (status == Status)
             return;

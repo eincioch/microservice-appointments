@@ -216,4 +216,54 @@ public class AppointmentDomainTests
             _fixture.Create<string>()
         );
     }
+
+    [Fact]
+    public void Given_StatusAlreadySet_When_UpdateStatus_Then_NoChange()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+        var initialStatus = appointment.Status;
+
+        // Act
+        appointment.UpdateStatus(initialStatus);
+
+        // Assert
+        Assert.Equal(initialStatus, appointment.Status);
+    }
+
+    [Fact]
+    public void Given_ValidStatus_When_UpdateStatusToCanceled_Then_StatusIsUpdated()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+
+        // Act
+        appointment.UpdateStatus(AppointmentStatus.Canceled);
+
+        // Assert
+        Assert.Equal(AppointmentStatus.Canceled, appointment.Status);
+    }
+
+    [Fact]
+    public void Given_ValidStatus_When_UpdateStatusToCompleted_Then_StatusIsUpdated()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+
+        // Act
+        appointment.UpdateStatus(AppointmentStatus.Completed);
+
+        // Assert
+        Assert.Equal(AppointmentStatus.Completed, appointment.Status);
+    }
+
+    [Fact]
+    public void Given_InvalidStatus_When_UpdateStatus_Then_ThrowsDomainValidationException()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+
+        // Act & Assert
+        Assert.Throws<DomainValidationException>(() => appointment.UpdateStatus((AppointmentStatus)999));
+    }
 }

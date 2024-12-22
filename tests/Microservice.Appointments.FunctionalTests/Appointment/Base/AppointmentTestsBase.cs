@@ -43,12 +43,19 @@ public abstract class AppointmentTestsBase
             MockEventBus.Object,
             NullLogger<UpdateAppointmentUseCase>.Instance
         );
+        var updateAppointmentStatusUseCase = new UpdateAppointmentStatusUseCase(
+            MockRepository.Object,
+            mapper,
+            MockEventBus.Object,
+            NullLogger<UpdateAppointmentStatusUseCase>.Instance
+        );
 
         return new AppointmentsController(
             getAppointmentsUseCase,
             getAppointmentByIdUseCase,
             createAppointmentUseCase,
-            updateAppointmentUseCase
+            updateAppointmentUseCase,
+            updateAppointmentStatusUseCase
         )
         {
             ControllerContext = new ControllerContext
