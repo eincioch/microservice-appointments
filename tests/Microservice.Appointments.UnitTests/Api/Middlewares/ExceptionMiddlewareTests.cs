@@ -30,8 +30,13 @@ public class ExceptionMiddlewareTests
 
         var testExceptionMessage = _fixture.Create<string>();
         var middleware = new ExceptionMiddleware(_ => throw new Exception(testExceptionMessage), mockLogger.Object, mockMapper.Object);
-        var context = new DefaultHttpContext();
-        context.Response.Body = new MemoryStream();
+        var context = new DefaultHttpContext
+        {
+            Response =
+            {
+                Body = new MemoryStream()
+            }
+        };
 
         // Act
         await middleware.InvokeAsync(context);
@@ -42,8 +47,8 @@ public class ExceptionMiddlewareTests
         context.Response.Body.Seek(StreamStartPosition, SeekOrigin.Begin);
         var responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
         var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseBody);
-        Assert.Equal(InternalServerErrorMessage, problemDetails.Title);
-        Assert.Equal(testExceptionMessage, problemDetails.Detail);
+        Assert.Equal(InternalServerErrorMessage, problemDetails?.Title);
+        Assert.Equal(testExceptionMessage, problemDetails?.Detail);
 
         mockLogger.Verify(
             logger => logger.Log(

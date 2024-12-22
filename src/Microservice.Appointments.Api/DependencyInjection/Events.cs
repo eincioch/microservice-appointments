@@ -13,7 +13,7 @@ public static partial class DependencyInjection
         var queueName = configuration["EventBus:QueueName"];
 
         //TODO: Use HostedService instead of await false
-        var eventBus = RabbitMqEventBus.CreateAsync(host, exchangeName, queueName)
+        var eventBus = RabbitMqEventBus.CreateAsync(host!, exchangeName!, queueName!)
             .ConfigureAwait(false)
             .GetAwaiter()
             .GetResult();
