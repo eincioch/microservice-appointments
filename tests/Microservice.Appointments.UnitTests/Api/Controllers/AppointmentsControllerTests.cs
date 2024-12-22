@@ -3,6 +3,7 @@ using AutoFixture.AutoMoq;
 using Microservice.Appointments.Api.Controllers;
 using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Application.UseCases.Abstractions;
+using Microservice.Appointments.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -27,12 +28,14 @@ public class AppointmentsControllerTests
         public AppointmentsController Build(
             Mock<IGetAppointmentsUseCase> getAppointmentsUseCase,
             Mock<IGetAppointmentByIdUseCase> getAppointmentByIdUseCase,
-            Mock<ICreateAppointmentUseCase> createAppointmentUseCase)
+            Mock<ICreateAppointmentUseCase> createAppointmentUseCase,
+            Mock<IUpdateAppointmentUseCase> updateAppointmentUseCase)
         {
             return new AppointmentsController(
                 getAppointmentsUseCase.Object,
                 getAppointmentByIdUseCase.Object,
-                createAppointmentUseCase.Object
+                createAppointmentUseCase.Object,
+                updateAppointmentUseCase.Object
             )
             {
                 ControllerContext = new ControllerContext
@@ -62,7 +65,8 @@ public class AppointmentsControllerTests
         var controller = builder.Build(
             mockGetAppointmentsUseCase,
             new Mock<IGetAppointmentByIdUseCase>(),
-            new Mock<ICreateAppointmentUseCase>()
+            new Mock<ICreateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentUseCase>()
         );
 
         // Act
@@ -87,7 +91,8 @@ public class AppointmentsControllerTests
         var controller = builder.Build(
             new Mock<IGetAppointmentsUseCase>(),
             mockGetAppointmentByIdUseCase,
-            new Mock<ICreateAppointmentUseCase>()
+            new Mock<ICreateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentUseCase>()
         );
 
         // Act
@@ -113,7 +118,8 @@ public class AppointmentsControllerTests
         var controller = builder.Build(
             new Mock<IGetAppointmentsUseCase>(),
             new Mock<IGetAppointmentByIdUseCase>(),
-            mockCreateAppointmentUseCase
+            mockCreateAppointmentUseCase,
+            new Mock<IUpdateAppointmentUseCase>()
         );
 
         // Act
@@ -125,5 +131,32 @@ public class AppointmentsControllerTests
         Assert.Equal(Builder.ControllerName, createdResult.ControllerName);
         Assert.Equal(appointment.Id, createdResult.RouteValues?[nameof(appointment.Id)]);
         Assert.Equal(appointment, createdResult.Value);
+    }
+
+    [Fact]
+    public async Task Given_Valid_Id_And_Input_When_Update_Then_Returns_Ok()
+    {
+        // Arrange
+        var builder = new Builder();
+        var mockUpdateAppointmentUseCase = new Mock<IUpdateAppointmentUseCase>();
+
+        var appointment = builder.Fixture.Create<AppointmentDto>();
+        mockUpdateAppointmentUseCase
+            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<AppointmentStatus>()))
+            .ReturnsAsync(appointment);
+
+        var controller = new AppointmentsController(
+            new Mock<IGetAppointmentsUseCase>().Object,
+            new Mock<IGetAppointmentByIdUseCase>().Object,
+            new Mock<ICreateAppointmentUseCase>().Object,
+            mockUpdateAppointmentUseCase.Object
+        );
+
+        // Act
+        var result = await controller.Update(appointment.Id, appointment.Title, appointment.StartTime, appointment.EndTime, appointment.Description, AppointmentStatus.Scheduled);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(appointment, okResult.Value);
     }
 }

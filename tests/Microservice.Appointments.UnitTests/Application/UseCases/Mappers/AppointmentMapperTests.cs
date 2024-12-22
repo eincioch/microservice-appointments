@@ -50,7 +50,26 @@ public class AppointmentMapperTests
         var domain = CreateDomain(_fixture);
 
         // Act
-        var eventMessage = mapper.ToAppointmentCreatedMessage(domain);
+        var eventMessage = mapper.ToCreatedMessage(domain);
+
+        // Assert
+        Assert.Equal(domain.Id, eventMessage.AppointmentId);
+        Assert.Equal(domain.Title, eventMessage.Title);
+        Assert.Equal(domain.StartTime, eventMessage.StartTime);
+        Assert.Equal(domain.EndTime, eventMessage.EndTime);
+        Assert.Equal(domain.Description, eventMessage.Description);
+        Assert.Equal(domain.Status, eventMessage.Status);
+    }
+
+    [Fact]
+    public void Given_AppointmentDomain_When_ToAppointmentChangedMessageIsCalled_Then_ReturnsCorrectEvent()
+    {
+        // Arrange
+        var mapper = new AppointmentMapper();
+        var domain = CreateDomain(_fixture);
+
+        // Act
+        var eventMessage = mapper.ToChangedMessage(domain);
 
         // Assert
         Assert.Equal(domain.Id, eventMessage.AppointmentId);

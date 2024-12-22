@@ -27,6 +27,19 @@ public class AppointmentDomain
         Status = AppointmentStatus.Scheduled;
     }
 
+    public void Update(string title, DateTime startTime, DateTime endTime, string description, AppointmentStatus status)
+    {
+        ValidateTitle(title);
+        ValidateDates(startTime, endTime);
+        UpdateStatus(status);
+
+        Title = title;
+        StartTime = startTime;
+        EndTime = endTime;
+        Description = description;
+        Status = status;
+    }
+
     /// <summary>
     /// Constructor for hydrating an existing appointment when fetching.
     /// </summary>
@@ -65,6 +78,24 @@ public class AppointmentDomain
             throw new DomainValidationException($"Appointment with ID {Id} is already {AppointmentStatus.Canceled}.");
 
         Status = AppointmentStatus.Canceled;
+    }
+
+    private void UpdateStatus(AppointmentStatus status)
+    {
+        if (status == Status)
+            return;
+
+        switch (status)
+        {
+            case AppointmentStatus.Canceled:
+                Cancel();
+                break;
+            case AppointmentStatus.Completed:
+                Complete();
+                break;
+            default:
+                throw new DomainValidationException($"Invalid status: {status}");
+        }
     }
 
     private static void ValidateDates(DateTime startTime, DateTime endTime)

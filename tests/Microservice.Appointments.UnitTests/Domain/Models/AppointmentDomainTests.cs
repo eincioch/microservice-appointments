@@ -170,6 +170,43 @@ public class AppointmentDomainTests
         Assert.Equal(status, appointment.Status);
     }
 
+    [Fact]
+    public void Given_ValidData_When_UpdateIsCalled_Then_PropertiesAreUpdatedCorrectly()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+        var newTitle = _fixture.Create<string>();
+        var newStartTime = DateTime.UtcNow;
+        var newEndTime = newStartTime.AddHours(ValidHoursToAdd);
+        var newDescription = _fixture.Create<string>();
+        var newStatus = AppointmentStatus.Completed;
+
+        // Act
+        appointment.Update(newTitle, newStartTime, newEndTime, newDescription, newStatus);
+
+        // Assert
+        Assert.Equal(newTitle, appointment.Title);
+        Assert.Equal(newStartTime, appointment.StartTime);
+        Assert.Equal(newEndTime, appointment.EndTime);
+        Assert.Equal(newDescription, appointment.Description);
+        Assert.Equal(newStatus, appointment.Status);
+    }
+
+    [Fact]
+    public void Given_InvalidStatus_When_UpdateIsCalled_Then_ThrowsDomainValidationException()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+        var newTitle = _fixture.Create<string>();
+        var newStartTime = DateTime.UtcNow;
+        var newEndTime = newStartTime.AddHours(ValidHoursToAdd);
+        var newDescription = _fixture.Create<string>();
+
+        // Act & Assert
+        Assert.Throws<DomainValidationException>(() =>
+            appointment.Update(newTitle, newStartTime, newEndTime, newDescription, (AppointmentStatus)999));
+    }
+
     private AppointmentDomain CreateValidAppointmentDomain()
     {
         return new AppointmentDomain(

@@ -1,5 +1,6 @@
 using Microservice.Appointments.Api.Helpers;
 using Microservice.Appointments.Application.UseCases.Abstractions;
+using Microservice.Appointments.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservice.Appointments.Api.Controllers;
@@ -8,11 +9,13 @@ namespace Microservice.Appointments.Api.Controllers;
 [Route("[controller]")]
 public class AppointmentsController(IGetAppointmentsUseCase appointmentsUseCase,
                                     IGetAppointmentByIdUseCase getAppointmentByIdUseCase,
-                                    ICreateAppointmentUseCase createAppointmentUseCase) : ControllerBase
+                                    ICreateAppointmentUseCase createAppointmentUseCase,
+                                    IUpdateAppointmentUseCase updateAppointmentUseCase) : ControllerBase
 {
     private readonly IGetAppointmentsUseCase _appointmentsUseCase = appointmentsUseCase;
     private readonly IGetAppointmentByIdUseCase _getAppointmentByIdUseCase = getAppointmentByIdUseCase;
     private readonly ICreateAppointmentUseCase _createAppointmentUseCase = createAppointmentUseCase;
+    private readonly IUpdateAppointmentUseCase _updateAppointmentUseCase = updateAppointmentUseCase;
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -42,5 +45,16 @@ public class AppointmentsController(IGetAppointmentsUseCase appointmentsUseCase,
     {
         var appointment = await _createAppointmentUseCase.ExecuteAsync(title, startTime, endTime, description);
         return ActionResultHelper.Created(nameof(GetById), ControllerContext.ActionDescriptor.ControllerName, appointment.Id, appointment);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Update(int id, string title, DateTime startTime, DateTime endTime, string description, AppointmentStatus status)
+    {
+        var result = await _updateAppointmentUseCase.ExecuteAsync(id, title, startTime, endTime, description, status);
+        return Ok(result);
     }
 }

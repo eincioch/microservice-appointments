@@ -17,7 +17,17 @@ public class AppointmentMapper : IAppointmentMapper
             appointmentDomain.Status
         );
 
-    public AppointmentCreatedEvent ToAppointmentCreatedMessage(AppointmentDomain appointmentDomain)
+    public AppointmentCreatedEvent ToCreatedMessage(AppointmentDomain appointmentDomain)
+        => new(
+            appointmentDomain.Id,
+            appointmentDomain.Title,
+            appointmentDomain.StartTime,
+            appointmentDomain.EndTime,
+            appointmentDomain.Description,
+            appointmentDomain.Status
+        );
+
+    public AppointmentChangedEvent ToChangedMessage(AppointmentDomain appointmentDomain)
         => new(
             appointmentDomain.Id,
             appointmentDomain.Title,

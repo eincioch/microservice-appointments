@@ -1,13 +1,14 @@
 ﻿using Microservice.Appointments.Application.Repositories;
 using Microservice.Appointments.Domain.Models;
+using Microservice.Appointments.Infrastructure.Entities;
 using Microservice.Appointments.Infrastructure.Mappers.Abstractions;
+using Microservice.Appointments.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microservice.Appointments.Infrastructure.Repositories
 {
-    public class AppointmentRepository(AppointmentsDbContext context, IAppointmentEntityMapper appointmentEntityMapper) : IAppointmentRepository
+    public class AppointmentRepository(AppointmentsDbContext context, IAppointmentEntityMapper appointmentEntityMapper) : RepositoryBase<AppointmentsDbContext, Appointment>(context), IAppointmentRepository
     {
-        private readonly AppointmentsDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
         private readonly IAppointmentEntityMapper _appointmentEntityMapper = appointmentEntityMapper ?? throw new ArgumentNullException(nameof(appointmentEntityMapper));
 
         public async Task<IEnumerable<AppointmentDomain>> GetAsync()
@@ -26,6 +27,15 @@ namespace Microservice.Appointments.Infrastructure.Repositories
         {
             var entity = _appointmentEntityMapper.ToEntity(appointmentDomain);
             _context.Appointments.Add(entity);
+            await _context.SaveChangesAsync();
+            return _appointmentEntityMapper.ToDomain(entity);
+        }
+
+        public async Task<AppointmentDomain> UpdateAsync(AppointmentDomain appointmentDomain)
+        {
+            var entity = _appointmentEntityMapper.ToEntity(appointmentDomain);
+            DetachEntity(entity.Id);
+            _context.Appointments.Update(entity);
             await _context.SaveChangesAsync();
             return _appointmentEntityMapper.ToDomain(entity);
         }
