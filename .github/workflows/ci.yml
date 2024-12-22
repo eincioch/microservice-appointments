@@ -1,0 +1,63 @@
+name: Build & Test Workflow
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install dependencies
+        run: dotnet restore Microservice.Appointments.sln
+
+      - name: ✅ Build solution 🚀
+        run: dotnet build Microservice.Appointments.sln --no-restore --configuration Release
+
+  unit-tests:
+    runs-on: runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: 🧪 Run Unit Tests 📊
+        run: dotnet test tests/Microservice.Appointments.UnitTests/Microservice.Appointments.UnitTests.csproj --configuration Release --verbosity detailed --logger "trx"
+      - name: ⬆ Upload Unit Test Results 📦
+        uses: actions/upload-artifact@v4
+        with:
+          name: UnitTestResults
+          path: "**/*.trx"
+
+  functional-tests:
+    runs-on: runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: 🔧 Run Functional Tests 📊
+        run: dotnet test tests/Microservice.Appointments.FunctionalTests/Microservice.Appointments.FunctionalTests.csproj --configuration Release --verbosity detailed --logger "trx"
+      - name: ⬆ Upload Functional Test Results 📦
+        uses: actions/upload-artifact@v4
+        with:
+          name: FunctionalTestResults
+          path: "**/*.trx"
