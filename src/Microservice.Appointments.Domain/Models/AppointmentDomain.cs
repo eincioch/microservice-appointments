@@ -98,6 +98,17 @@ public class AppointmentDomain
         }
     }
 
+    public void ValidateDeletable()
+    {
+        switch (Status)
+        {
+            case AppointmentStatus.Completed:
+                throw new DomainValidationException($"Appointment with ID {Id} cannot be deleted because it is already completed.");
+            case AppointmentStatus.Canceled:
+                throw new DomainValidationException($"Appointment with ID {Id} cannot be deleted because it is already canceled.");
+        }
+    }
+
     private static void ValidateDates(DateTime startTime, DateTime endTime)
     {
         if (startTime >= endTime)

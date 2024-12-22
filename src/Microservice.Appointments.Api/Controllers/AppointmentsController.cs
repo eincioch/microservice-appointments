@@ -11,13 +11,15 @@ public class AppointmentsController(IGetAppointmentsUseCase appointmentsUseCase,
                                     IGetAppointmentByIdUseCase getAppointmentByIdUseCase,
                                     ICreateAppointmentUseCase createAppointmentUseCase,
                                     IUpdateAppointmentUseCase updateAppointmentUseCase,
-                                    IUpdateAppointmentStatusUseCase updateAppointmentStatusUseCase) : ControllerBase
+                                    IUpdateAppointmentStatusUseCase updateAppointmentStatusUseCase,
+                                    IDeleteAppointmentUseCase deleteAppointmentUseCase) : ControllerBase
 {
     private readonly IGetAppointmentsUseCase _appointmentsUseCase = appointmentsUseCase;
     private readonly IGetAppointmentByIdUseCase _getAppointmentByIdUseCase = getAppointmentByIdUseCase;
     private readonly ICreateAppointmentUseCase _createAppointmentUseCase = createAppointmentUseCase;
     private readonly IUpdateAppointmentUseCase _updateAppointmentUseCase = updateAppointmentUseCase;
     private readonly IUpdateAppointmentStatusUseCase _updateAppointmentStatusUseCase = updateAppointmentStatusUseCase;
+    private readonly IDeleteAppointmentUseCase _deleteAppointmentUseCase = deleteAppointmentUseCase;
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -69,5 +71,15 @@ public class AppointmentsController(IGetAppointmentsUseCase appointmentsUseCase,
     {
         var result = await _updateAppointmentStatusUseCase.ExecuteAsync(id, status);
         return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _deleteAppointmentUseCase.ExecuteAsync(id);
+        return NoContent();
     }
 }

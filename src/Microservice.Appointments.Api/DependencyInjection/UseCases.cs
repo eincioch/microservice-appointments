@@ -11,6 +11,8 @@ public static partial class DependencyInjection
         services.AddScoped<IGetAppointmentByIdUseCase, GetAppointmentByIdUseCase>();
         services.AddScoped<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
         services.AddScoped<IUpdateAppointmentUseCase, UpdateAppointmentUseCase>();
+        services.AddScoped<IUpdateAppointmentStatusUseCase, UpdateAppointmentStatusUseCase>();
+        services.AddScoped<IDeleteAppointmentUseCase, DeleteAppointmentUseCase>();
 
         return services;
     }

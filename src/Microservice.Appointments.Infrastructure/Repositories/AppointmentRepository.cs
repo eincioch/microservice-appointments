@@ -39,5 +39,13 @@ namespace Microservice.Appointments.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return _appointmentEntityMapper.ToDomain(entity);
         }
+
+        public async Task RemoveAsync(AppointmentDomain appointmentDomain)
+        {
+            var entity = _appointmentEntityMapper.ToEntity(appointmentDomain);
+            AttachEntity(entity);
+            _context.Appointments.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -30,14 +30,16 @@ public class AppointmentsControllerTests
             Mock<IGetAppointmentByIdUseCase> getAppointmentByIdUseCase,
             Mock<ICreateAppointmentUseCase> createAppointmentUseCase,
             Mock<IUpdateAppointmentUseCase> updateAppointmentUseCase,
-            Mock<IUpdateAppointmentStatusUseCase> updateAppointmentStatusUseCase)
+            Mock<IUpdateAppointmentStatusUseCase> updateAppointmentStatusUseCase,
+            Mock<IDeleteAppointmentUseCase> deleteAppointmentUseCase)
         {
             return new AppointmentsController(
                 getAppointmentsUseCase.Object,
                 getAppointmentByIdUseCase.Object,
                 createAppointmentUseCase.Object,
                 updateAppointmentUseCase.Object,
-                updateAppointmentStatusUseCase.Object
+                updateAppointmentStatusUseCase.Object,
+                deleteAppointmentUseCase.Object
             )
             {
                 ControllerContext = new ControllerContext
@@ -69,7 +71,8 @@ public class AppointmentsControllerTests
             new Mock<IGetAppointmentByIdUseCase>(),
             new Mock<ICreateAppointmentUseCase>(),
             new Mock<IUpdateAppointmentUseCase>(),
-            new Mock<IUpdateAppointmentStatusUseCase>()
+            new Mock<IUpdateAppointmentStatusUseCase>(),
+            new Mock<IDeleteAppointmentUseCase>()
         );
 
         // Act
@@ -96,7 +99,8 @@ public class AppointmentsControllerTests
             mockGetAppointmentByIdUseCase,
             new Mock<ICreateAppointmentUseCase>(),
             new Mock<IUpdateAppointmentUseCase>(),
-            new Mock<IUpdateAppointmentStatusUseCase>()
+            new Mock<IUpdateAppointmentStatusUseCase>(),
+            new Mock<IDeleteAppointmentUseCase>()
         );
 
         // Act
@@ -124,7 +128,8 @@ public class AppointmentsControllerTests
             new Mock<IGetAppointmentByIdUseCase>(),
             mockCreateAppointmentUseCase,
             new Mock<IUpdateAppointmentUseCase>(),
-            new Mock<IUpdateAppointmentStatusUseCase>()
+            new Mock<IUpdateAppointmentStatusUseCase>(),
+            new Mock<IDeleteAppointmentUseCase>()
         );
 
         // Act
@@ -155,7 +160,8 @@ public class AppointmentsControllerTests
             new Mock<IGetAppointmentByIdUseCase>(),
             new Mock<ICreateAppointmentUseCase>(),
             mockUpdateAppointmentUseCase,
-            new Mock<IUpdateAppointmentStatusUseCase>()
+            new Mock<IUpdateAppointmentStatusUseCase>(),
+            new Mock<IDeleteAppointmentUseCase>()
         );
 
         // Act
@@ -183,7 +189,8 @@ public class AppointmentsControllerTests
             new Mock<IGetAppointmentByIdUseCase>(),
             new Mock<ICreateAppointmentUseCase>(),
             new Mock<IUpdateAppointmentUseCase>(),
-            mockUpdateAppointmentStatusUseCase
+            mockUpdateAppointmentStatusUseCase,
+            new Mock<IDeleteAppointmentUseCase>()
         );
 
         // Act
@@ -192,5 +199,28 @@ public class AppointmentsControllerTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(appointment, okResult.Value);
+    }
+
+    [Fact]
+    public async Task Given_Valid_Id_When_Delete_Then_Returns_NoContent()
+    {
+        // Arrange
+        var builder = new Builder();
+        var mockDeleteAppointmentUseCase = new Mock<IDeleteAppointmentUseCase>();
+
+        var controller = builder.Build(
+            new Mock<IGetAppointmentsUseCase>(),
+            new Mock<IGetAppointmentByIdUseCase>(),
+            new Mock<ICreateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentUseCase>(),
+            new Mock<IUpdateAppointmentStatusUseCase>(),
+            mockDeleteAppointmentUseCase
+        );
+
+        // Act
+        var result = await controller.Delete(builder.Fixture.Create<int>());
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
     }
 }

@@ -9,4 +9,5 @@ public interface IAppointmentMapper
     AppointmentDto ToDto(AppointmentDomain appointmentDomain);
     AppointmentCreatedEvent ToCreatedMessage(AppointmentDomain appointmentDomain);
     AppointmentChangedEvent ToChangedMessage(AppointmentDomain appointmentDomain);
+    AppointmentDeletedEvent ToDeletedMessage(AppointmentDomain appointmentDomain);
 }

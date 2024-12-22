@@ -8,4 +8,5 @@ public interface IAppointmentRepository
     Task<AppointmentDomain> GetAsync(int id);
     Task<AppointmentDomain> AddAsync(AppointmentDomain appointmentDomain);
     Task<AppointmentDomain> UpdateAsync(AppointmentDomain appointmentDomain);
+    Task RemoveAsync(AppointmentDomain appointmentDomain);
 }

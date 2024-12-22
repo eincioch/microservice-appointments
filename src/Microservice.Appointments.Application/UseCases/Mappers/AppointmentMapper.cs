@@ -36,4 +36,14 @@ public class AppointmentMapper : IAppointmentMapper
             appointmentDomain.Description,
             appointmentDomain.Status
         );
+
+    public AppointmentDeletedEvent ToDeletedMessage(AppointmentDomain appointmentDomain)
+        => new(
+            appointmentDomain.Id,
+            appointmentDomain.Title,
+            appointmentDomain.StartTime,
+            appointmentDomain.EndTime,
+            appointmentDomain.Description,
+            appointmentDomain.Status
+        );
 }

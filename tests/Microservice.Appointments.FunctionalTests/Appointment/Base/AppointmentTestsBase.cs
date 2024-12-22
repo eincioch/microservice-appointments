@@ -49,13 +49,20 @@ public abstract class AppointmentTestsBase
             MockEventBus.Object,
             NullLogger<UpdateAppointmentStatusUseCase>.Instance
         );
+        var deleteAppointmentStatusUseCase = new DeleteAppointmentUseCase(
+            MockRepository.Object,
+            mapper,
+            MockEventBus.Object,
+            NullLogger<DeleteAppointmentUseCase>.Instance
+        );
 
         return new AppointmentsController(
             getAppointmentsUseCase,
             getAppointmentByIdUseCase,
             createAppointmentUseCase,
             updateAppointmentUseCase,
-            updateAppointmentStatusUseCase
+            updateAppointmentStatusUseCase,
+            deleteAppointmentStatusUseCase
         )
         {
             ControllerContext = new ControllerContext
@@ -81,5 +88,15 @@ public abstract class AppointmentTestsBase
             DateTime.UtcNow.AddDays(DaysInFuture),
             Fixture.Create<string>(),
             Fixture.Create<AppointmentStatus>()
+        );
+
+    protected AppointmentDomain CreateDomain(AppointmentStatus status)
+        => AppointmentDomain.Hydrate(
+            Fixture.Create<int>(),
+            Fixture.Create<string>(),
+            DateTime.UtcNow.AddDays(DaysInPast),
+            DateTime.UtcNow.AddDays(DaysInFuture),
+            Fixture.Create<string>(),
+            status
         );
 }

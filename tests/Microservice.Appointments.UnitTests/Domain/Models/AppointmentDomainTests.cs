@@ -14,6 +14,12 @@ public class AppointmentDomainTests
     private const int InvalidHoursToAdd = -1;
 
     private readonly Fixture _fixture = new();
+    public static IEnumerable<object[]> InvalidStatuses =>
+        new List<object[]>
+        {
+            new object[] { AppointmentStatus.Completed, "completed" },
+            new object[] { AppointmentStatus.Canceled, "canceled" }
+        };
 
     [Fact]
     public void Given_NullOrEmptyTitle_When_Constructed_Then_ThrowsDomainValidationException()
@@ -265,5 +271,51 @@ public class AppointmentDomainTests
 
         // Act & Assert
         Assert.Throws<DomainValidationException>(() => appointment.UpdateStatus((AppointmentStatus)999));
+    }
+
+    [Fact]
+    public void Given_StatusIsCompleted_When_ValidateDeletable_Then_ThrowsDomainValidationException()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+        appointment.Complete();
+
+        // Act & Assert
+        var exception = Assert.Throws<DomainValidationException>(() => appointment.ValidateDeletable());
+        Assert.Equal($"Appointment with ID {appointment.Id} cannot be deleted because it is already completed.", exception.Message);
+    }
+
+    [Fact]
+    public void Given_StatusIsCanceled_When_ValidateDeletable_Then_ThrowsDomainValidationException()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+        appointment.Cancel();
+
+        // Act & Assert
+        var exception = Assert.Throws<DomainValidationException>(() => appointment.ValidateDeletable());
+        Assert.Equal($"Appointment with ID {appointment.Id} cannot be deleted because it is already canceled.", exception.Message);
+    }
+
+    [Theory]
+    [MemberData(nameof(InvalidStatuses))]
+    public void Given_InvalidStatus_When_ValidateDeletable_Then_ThrowsDomainValidationException(AppointmentStatus status, string statusDescription)
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+
+        switch (status)
+        {
+            case AppointmentStatus.Completed:
+                appointment.Complete();
+                break;
+            case AppointmentStatus.Canceled:
+                appointment.Cancel();
+                break;
+        }
+
+        // Act & Assert
+        var exception = Assert.Throws<DomainValidationException>(() => appointment.ValidateDeletable());
+        Assert.Equal($"Appointment with ID {appointment.Id} cannot be deleted because it is already {statusDescription}.", exception.Message);
     }
 }
