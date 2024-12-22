@@ -1,10 +1,10 @@
 using Microservice.Appointments.Api.DependencyInjection;
-using Microservice.Appointments.Api.Initializers;
+using Microservice.Appointments.Api.Initializers.Core;
 using Microservice.Appointments.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-RabbitMqInitializer.SetupRabbitMq();
+ServiceInitializer.InitializeInfrastructure();
 
 builder.Services.AddControllers();
 builder.Services.AddUseCases();
