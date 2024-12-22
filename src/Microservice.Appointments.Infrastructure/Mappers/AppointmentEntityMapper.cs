@@ -6,12 +6,15 @@ namespace Microservice.Appointments.Infrastructure.Mappers;
 
 public class AppointmentEntityMapper : IAppointmentEntityMapper
 {
-    public AppointmentDomain ToDomain(Appointment entity)
-        => entity is null ? null : AppointmentDomain.Hydrate(entity.Id, entity.Title, entity.StartTime, entity.EndTime, entity.Description, entity.Status);
+    public IEnumerable<AppointmentDomain> ToDomainCollection(IEnumerable<Appointment>? entities)
+        => (entities is null ? new List<AppointmentDomain>() : entities.Select(ToDomain))!;
 
-    public Appointment ToEntity(AppointmentDomain domain)
-        => domain is null
-            ? null : new()
+    public AppointmentDomain ToDomain(Appointment? entity)
+        => (entity is null ? null : AppointmentDomain.Hydrate(entity.Id, entity.Title, entity.StartTime, entity.EndTime, entity.Description, entity.Status))!;
+
+    public Appointment ToEntity(AppointmentDomain? domain)
+        => (domain is null
+            ? null : new Appointment
             {
                 Id = domain.Id,
                 Title = domain.Title,
@@ -19,5 +22,5 @@ public class AppointmentEntityMapper : IAppointmentEntityMapper
                 EndTime = domain.EndTime,
                 Description = domain.Description,
                 Status = domain.Status
-            };
+            })!;
 }

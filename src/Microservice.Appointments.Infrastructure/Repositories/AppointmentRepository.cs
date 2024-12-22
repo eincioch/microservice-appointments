@@ -1,29 +1,33 @@
 ﻿using Microservice.Appointments.Application.Repositories;
 using Microservice.Appointments.Domain.Models;
+using Microservice.Appointments.Infrastructure.Mappers.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Microservice.Appointments.Infrastructure.Repositories
 {
-    public class AppointmentRepository : IAppointmentRepository
+    public class AppointmentRepository(AppointmentsDbContext context, IAppointmentEntityMapper appointmentEntityMapper) : IAppointmentRepository
     {
-        //TODO: Use Entity Mappers here when EF Core is implemented
-        AppointmentDomain _mockedAppointmentDomain = new AppointmentDomain("Sample Title", DateTime.UtcNow, DateTime.UtcNow.AddHours(1), "Sample Description");
+        private readonly AppointmentsDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
+        private readonly IAppointmentEntityMapper _appointmentEntityMapper = appointmentEntityMapper ?? throw new ArgumentNullException(nameof(appointmentEntityMapper));
 
         public async Task<IEnumerable<AppointmentDomain>> GetAsync()
         {
-            return await Task.FromResult<IEnumerable<AppointmentDomain>>(new List<AppointmentDomain>
-            {
-                _mockedAppointmentDomain
-            });
+            var appointments = await _context.Appointments.ToListAsync();
+            return appointmentEntityMapper.ToDomainCollection(appointments);
         }
 
         public async Task<AppointmentDomain> GetAsync(int id)
         {
-            return await Task.FromResult(_mockedAppointmentDomain);
+            var appointment = await _context.Appointments.FindAsync(id);
+            return appointmentEntityMapper.ToDomain(appointment!);
         }
 
         public async Task<AppointmentDomain> AddAsync(AppointmentDomain appointmentDomain)
         {
-            return await Task.FromResult(_mockedAppointmentDomain);
+            var entity = appointmentEntityMapper.ToEntity(appointmentDomain);
+            _context.Appointments.Add(entity);
+            await _context.SaveChangesAsync();
+            return appointmentEntityMapper.ToDomain(entity);
         }
     }
 }
