@@ -30,15 +30,15 @@ public class CreateAppointmentUseCase(
         {
             var appointment = new AppointmentDomain(title, startTime, endTime, description);
 
-            var appointmentEntity = await _appointmentRepository.AddAsync(appointment);
-            appointment.AssignId(appointmentEntity.Id);
+            var appointmentSaved = await _appointmentRepository.AddAsync(appointment);
+            appointment.AssignId(appointmentSaved.Id);
 
-            var eventMessage = _appointmentMapper.ToAppointmentCreatedMessage(appointment);
+            var eventMessage = _appointmentMapper.ToAppointmentCreatedMessage(appointmentSaved);
 
             var eventName = EventHelper.GetEventName<AppointmentCreatedEvent>();
             await _eventBus.PublishAsync(eventMessage, eventName);
 
-            return _appointmentMapper.ToDto(appointment);
+            return _appointmentMapper.ToDto(appointmentSaved);
         }
         catch (DomainValidationException exception)
         {
