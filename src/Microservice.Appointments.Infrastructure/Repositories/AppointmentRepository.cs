@@ -13,21 +13,21 @@ namespace Microservice.Appointments.Infrastructure.Repositories
         public async Task<IEnumerable<AppointmentDomain>> GetAsync()
         {
             var appointments = await _context.Appointments.ToListAsync();
-            return appointmentEntityMapper.ToDomainCollection(appointments);
+            return _appointmentEntityMapper.ToDomainCollection(appointments);
         }
 
         public async Task<AppointmentDomain> GetAsync(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
-            return appointmentEntityMapper.ToDomain(appointment!);
+            return _appointmentEntityMapper.ToDomain(appointment!);
         }
 
         public async Task<AppointmentDomain> AddAsync(AppointmentDomain appointmentDomain)
         {
-            var entity = appointmentEntityMapper.ToEntity(appointmentDomain);
+            var entity = _appointmentEntityMapper.ToEntity(appointmentDomain);
             _context.Appointments.Add(entity);
             await _context.SaveChangesAsync();
-            return appointmentEntityMapper.ToDomain(entity);
+            return _appointmentEntityMapper.ToDomain(entity);
         }
     }
 }
