@@ -1,4 +1,8 @@
 ﻿using Microservice.Appointments.Application.EventBus;
+using Microservice.Appointments.Application.EventBus.Handlers;
+using Microservice.Appointments.Application.EventHandlers;
+using Microservice.Appointments.Application.Helpers;
+using Microservice.Appointments.Domain.Events;
 using Microservice.Appointments.Infrastructure.EventBus;
 using Microservice.Appointments.Infrastructure.EventBus.HostedServices;
 
@@ -20,7 +24,12 @@ public static partial class DependencyInjection
 
         services.AddSingleton<IEventBus>(eventBus);
 
-        var routingMap = new Dictionary<Type, string>();
+        services.AddScoped<IEventHandler<AppointmentNotificationEvent>, AppointmentNotificationHandler>();
+
+        var routingMap = new Dictionary<Type, string>
+        {
+            { typeof(AppointmentNotificationEvent), EventHelper.GetEventName<AppointmentNotificationEvent>() }
+        };
 
         services.AddSingleton(routingMap);
         services.AddHostedService<EventBusHostedService>();

@@ -14,6 +14,7 @@ public class AppointmentDomain
     public DateTime EndTime { get; private set; }
     public string Description { get; private set; }
     public AppointmentStatus Status { get; private set; }
+    public NotificationStatus NotificationStatus { get; private set; } = NotificationStatus.NotSent;
 
     public AppointmentDomain(string title, DateTime startTime, DateTime endTime, string description)
     {
@@ -78,6 +79,14 @@ public class AppointmentDomain
             throw new DomainValidationException($"Appointment with ID {Id} is already {AppointmentStatus.Canceled}.");
 
         Status = AppointmentStatus.Canceled;
+    }
+
+    public void MarkNotificationSent()
+    {
+        if (NotificationStatus == NotificationStatus.Sent)
+            throw new DomainValidationException($"Notification of Appointment with ID {Id} has already been sent.");
+
+        NotificationStatus = NotificationStatus.Sent;
     }
 
     public void UpdateStatus(AppointmentStatus status)

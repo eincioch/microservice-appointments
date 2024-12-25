@@ -213,16 +213,6 @@ public class AppointmentDomainTests
             appointment.Update(newTitle, newStartTime, newEndTime, newDescription, (AppointmentStatus)999));
     }
 
-    private AppointmentDomain CreateValidAppointmentDomain()
-    {
-        return new AppointmentDomain(
-            _fixture.Create<string>(),
-            DateTime.UtcNow,
-            DateTime.UtcNow.AddHours(ValidHoursToAdd),
-            _fixture.Create<string>()
-        );
-    }
-
     [Fact]
     public void Given_StatusAlreadySet_When_UpdateStatus_Then_NoChange()
     {
@@ -317,5 +307,39 @@ public class AppointmentDomainTests
         // Act & Assert
         var exception = Assert.Throws<DomainValidationException>(() => appointment.ValidateDeletable());
         Assert.Equal($"Appointment with ID {appointment.Id} cannot be deleted because it is already {statusDescription}.", exception.Message);
+    }
+
+    [Fact]
+    public void Given_NotificationStatusAlreadySent_When_MarkNotificationSent_Then_ThrowsDomainValidationException()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+        appointment.MarkNotificationSent();
+
+        // Act & Assert
+        Assert.Throws<DomainValidationException>(() => appointment.MarkNotificationSent());
+    }
+
+    [Fact]
+    public void Given_NotificationStatusNotSent_When_MarkNotificationSent_Then_NotificationStatusIsUpdated()
+    {
+        // Arrange
+        var appointment = CreateValidAppointmentDomain();
+
+        // Act
+        appointment.MarkNotificationSent();
+
+        // Assert
+        Assert.Equal(NotificationStatus.Sent, appointment.NotificationStatus);
+    }
+
+    private AppointmentDomain CreateValidAppointmentDomain()
+    {
+        return new AppointmentDomain(
+            _fixture.Create<string>(),
+            DateTime.UtcNow,
+            DateTime.UtcNow.AddHours(ValidHoursToAdd),
+            _fixture.Create<string>()
+        );
     }
 }
