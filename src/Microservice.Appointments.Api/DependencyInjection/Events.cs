@@ -1,4 +1,5 @@
-﻿using Microservice.Appointments.Application.Configuration;
+﻿using Microservice.Appointments.Api.HostedServices;
+using Microservice.Appointments.Application.Configuration;
 using Microservice.Appointments.Infrastructure.Configurations;
 
 namespace Microservice.Appointments.Api.DependencyInjection;
@@ -12,13 +13,17 @@ public static partial class DependencyInjection
         var exchangeName = configuration["EventBus:ExchangeName"];
         var queueName = configuration["EventBus:QueueName"];
 
-        //TODO: Use HostedService instead of await false
         var eventBus = RabbitMqEventBus.CreateAsync(host!, exchangeName!, queueName!)
             .ConfigureAwait(false)
             .GetAwaiter()
             .GetResult();
 
         services.AddSingleton<IEventBus>(eventBus);
+
+        var routingMap = new Dictionary<Type, string>();
+
+        services.AddSingleton(routingMap);
+        services.AddHostedService<EventBusHostedService>();
 
         return services;
     }

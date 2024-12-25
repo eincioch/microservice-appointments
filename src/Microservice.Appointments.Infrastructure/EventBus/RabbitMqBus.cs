@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microservice.Appointments.Application.Configuration;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
 namespace Microservice.Appointments.Infrastructure.Configurations;
@@ -10,8 +11,7 @@ namespace Microservice.Appointments.Infrastructure.Configurations;
 /// <summary>
 /// Event bus implementation using RabbitMQ as the underlying messaging infrastructure.
 /// </summary>
-public sealed class RabbitMqEventBus(IConnection connection, IModel channel, string exchangeName)
-    : IEventBus
+public sealed class RabbitMqEventBus(IConnection connection, IModel channel, string exchangeName) : IEventBus
 {
     private readonly IConnection _connection = connection ?? throw new ArgumentNullException(nameof(connection));
     private readonly IModel _channel = channel ?? throw new ArgumentNullException(nameof(channel));
@@ -59,9 +59,7 @@ public sealed class RabbitMqEventBus(IConnection connection, IModel channel, str
         }
     }
 
-
-
-public Task PublishAsync<T>(T @event, string routingKey)
+    public Task PublishAsync<T>(T @event, string routingKey)
     {
         if (_disposed)
             throw new ObjectDisposedException(nameof(RabbitMqEventBus));
@@ -83,6 +81,45 @@ public Task PublishAsync<T>(T @event, string routingKey)
         );
 
         return Task.CompletedTask;
+    }
+
+    public async Task SubscribeAsync<T>(string routingKey, Func<T, Task> handler)
+    {
+        if (_disposed)
+            throw new ObjectDisposedException(nameof(RabbitMqEventBus));
+
+        if (string.IsNullOrWhiteSpace(routingKey))
+            throw new ArgumentNullException(nameof(routingKey));
+
+        if (handler == null)
+            throw new ArgumentNullException(nameof(handler));
+
+        await Task.Run(() =>
+        {
+            _channel.QueueDeclare(queue: routingKey, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _channel.QueueBind(queue: routingKey, exchange: _exchangeName, routingKey: routingKey);
+        });
+
+        var consumer = new EventingBasicConsumer(_channel);
+        consumer.Received += async (_, eventArgs) =>
+        {
+            try
+            {
+                var messageBody = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+                var deserializedEvent = JsonSerializer.Deserialize<T>(messageBody);
+
+                if (deserializedEvent != null)
+                {
+                    await handler(deserializedEvent);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error procesando el mensaje: {ex.Message}");
+            }
+        };
+
+        _channel.BasicConsume(queue: routingKey, autoAck: true, consumer: consumer);
     }
 
     public ValueTask DisposeAsync()
