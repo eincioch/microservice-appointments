@@ -1,6 +1,6 @@
-﻿using Microservice.Appointments.Api.HostedServices;
-using Microservice.Appointments.Application.Configuration;
-using Microservice.Appointments.Infrastructure.Configurations;
+﻿using Microservice.Appointments.Application.EventBus;
+using Microservice.Appointments.Infrastructure.EventBus;
+using Microservice.Appointments.Infrastructure.EventBus.HostedServices;
 
 namespace Microservice.Appointments.Api.DependencyInjection;
 

@@ -1,4 +1,4 @@
-﻿namespace Microservice.Appointments.Application.Configuration;
+﻿namespace Microservice.Appointments.Application.EventBus;
 
 /// <summary>
 /// Represents an asynchronous event bus that can publish messages to a message broker.

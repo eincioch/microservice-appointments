@@ -1,12 +1,12 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-using Microservice.Appointments.Application.Configuration;
+using Microservice.Appointments.Application.EventBus;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
-namespace Microservice.Appointments.Infrastructure.Configurations;
+namespace Microservice.Appointments.Infrastructure.EventBus;
 
 /// <summary>
 /// Event bus implementation using RabbitMQ as the underlying messaging infrastructure.

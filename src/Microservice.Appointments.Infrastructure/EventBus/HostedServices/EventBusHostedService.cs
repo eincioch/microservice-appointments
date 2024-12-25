@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
-using Microservice.Appointments.Application.Configuration;
+using Microservice.Appointments.Application.EventBus;
 using Microservice.Appointments.Application.EventBus.Handlers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace Microservice.Appointments.Api.HostedServices;
+namespace Microservice.Appointments.Infrastructure.EventBus.HostedServices;
 
 public class EventBusHostedService(IEventBus eventBus, IServiceScopeFactory scopeFactory, Dictionary<Type, string> routingMap) : IHostedService
 {

@@ -1,5 +1,5 @@
 using AutoFixture;
-using Microservice.Appointments.Application.Configuration;
+using Microservice.Appointments.Application.EventBus;
 using Microservice.Appointments.Application.Repositories;
 using Microservice.Appointments.Application.UseCases;
 using Microservice.Appointments.Application.UseCases.Mappers.Abstractions;
