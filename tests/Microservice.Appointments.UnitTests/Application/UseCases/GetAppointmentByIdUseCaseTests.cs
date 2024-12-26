@@ -44,7 +44,7 @@ public class GetAppointmentByIdUseCaseTests
     #endregion Builder
 
     [Fact]
-    public async Task Given_InvalidId_When_ExecuteAsync_Then_ThrowsBadRequestException()
+    public async Task Given_Invalid_Id_When_ExecuteAsync_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var builder = new Builder();
@@ -58,7 +58,7 @@ public class GetAppointmentByIdUseCaseTests
     }
 
     [Fact]
-    public async Task Given_IdNotFound_When_ExecuteAsync_Then_ThrowsNotFoundException()
+    public async Task Given_Id_Not_Found_When_ExecuteAsync_Called_Then_Throws_NotFoundException()
     {
         // Arrange
         var builder = new Builder();
@@ -77,7 +77,7 @@ public class GetAppointmentByIdUseCaseTests
     }
 
     [Fact]
-    public async Task Given_ValidId_When_ExecuteAsync_Then_ReturnsAppointmentDto()
+    public async Task Given_Valid_Id_When_ExecuteAsync_Called_Then_Returns_Appointment_Dto()
     {
         // Arrange
         var builder = new Builder();
@@ -106,7 +106,7 @@ public class GetAppointmentByIdUseCaseTests
     }
 
     [Fact]
-    public void Given_NullDependencies_When_Constructed_Then_ThrowsArgumentNullException()
+    public void Given_Null_Dependencies_When_Constructed_Then_Throws_ArgumentNullException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() =>

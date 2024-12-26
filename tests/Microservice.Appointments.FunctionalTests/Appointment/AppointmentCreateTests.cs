@@ -15,7 +15,7 @@ public class AppointmentCreateTests : AppointmentTestsBase
     private const int HoursInFuture = 1;
 
     [Fact]
-    public async Task Create_ReturnsCreated_WhenAppointmentIsSuccessfullyCreated()
+    public async Task Given_Valid_Appointment_When_Create_Called_Then_Returns_Created()
     {
         // Arrange
         var controller = CreateController();
@@ -54,7 +54,7 @@ public class AppointmentCreateTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task Create_ThrowsBadRequestException_WhenAppointmentIsInvalid()
+    public async Task Given_Invalid_Appointment_When_Create_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var controller = CreateController();

@@ -10,7 +10,7 @@ namespace Microservice.Appointments.FunctionalTests.Appointment;
 public class AppointmentGetAllTests : AppointmentTestsBase
 {
     [Fact]
-    public async Task GetAll_ReturnsOk_WhenAppointmentsExist()
+    public async Task Given_Appointments_Exist_When_GetAll_Called_Then_Returns_Ok()
     {
         // Arrange
         var controller = CreateController();
@@ -33,7 +33,7 @@ public class AppointmentGetAllTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task GetAll_ReturnsEmptyList_WhenNoAppointmentsExist()
+    public async Task Given_No_Appointments_Exist_When_GetAll_Called_Then_Returns_Empty_List()
     {
         // Arrange
         var controller = CreateController();

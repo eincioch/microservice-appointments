@@ -24,7 +24,7 @@ public class AppointmentMapperTests
         );
 
     [Fact]
-    public void Given_AppointmentDomain_When_ToDtoIsCalled_Then_ReturnsCorrectAppointmentDto()
+    public void Given_Appointment_Domain_When_To_Dto_Is_Called_Then_Returns_Correct_Appointment_Dto()
     {
         // Arrange
         var mapper = new AppointmentMapper();
@@ -43,7 +43,7 @@ public class AppointmentMapperTests
     }
 
     [Fact]
-    public void Given_AppointmentDomain_When_ToAppointmentCreatedMessageIsCalled_Then_ReturnsCorrectEvent()
+    public void Given_Appointment_Domain_When_To_Appointment_Created_Message_Is_Called_Then_Returns_Correct_Event()
     {
         // Arrange
         var mapper = new AppointmentMapper();
@@ -62,7 +62,7 @@ public class AppointmentMapperTests
     }
 
     [Fact]
-    public void Given_AppointmentDomain_When_ToAppointmentChangedMessageIsCalled_Then_ReturnsCorrectEvent()
+    public void Given_Appointment_Domain_When_To_Appointment_Changed_Message_Is_Called_Then_Returns_Correct_Event()
     {
         // Arrange
         var mapper = new AppointmentMapper();
@@ -80,9 +80,8 @@ public class AppointmentMapperTests
         Assert.Equal(domain.Status, eventMessage.Status);
     }
 
-
     [Fact]
-    public void Given_AppointmentDomain_When_ToAppointmentDeletedMessageIsCalled_Then_ReturnsCorrectEvent()
+    public void Given_Appointment_Domain_When_To_Appointment_Deleted_Message_Is_Called_Then_Returns_Correct_Event()
     {
         // Arrange
         var mapper = new AppointmentMapper();

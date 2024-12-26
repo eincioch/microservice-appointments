@@ -15,7 +15,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
     private const string ValidationErrorMessage = "Validation error occurred while updating the appointment status.";
 
     [Fact]
-    public async Task UpdateStatus_ReturnsOk_WhenStatusIsSuccessfullyUpdated()
+    public async Task Given_Valid_Appointment_When_UpdateStatus_Called_Then_Returns_Ok()
     {
         // Arrange
         var controller = CreateController();
@@ -42,7 +42,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task UpdateStatus_ThrowsNotFoundException_WhenAppointmentNotExists()
+    public async Task Given_Non_Existent_Appointment_When_UpdateStatus_Called_Then_Throws_NotFoundException()
     {
         // Arrange
         var controller = CreateController();
@@ -61,7 +61,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task UpdateStatus_ThrowsBadRequestException_WhenStatusIsInvalid()
+    public async Task Given_Valid_Appointment_When_UpdateStatus_Called_With_Invalid_Status_Then_Throws_BadRequestException()
     {
         // Arrange
         var controller = CreateController();

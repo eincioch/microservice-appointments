@@ -13,7 +13,7 @@ public class EventHelperTests
     private class AnotherSampleEvent { }
 
     [Fact]
-    public void Given_SampleClassEvent_When_GetEventNameIsCalled_Then_ReturnsFormattedEventName()
+    public void Given_Sample_Class_Event_When_Get_Event_Name_Is_Called_Then_Returns_Formatted_Event_Name()
     {
         // Act
         var eventName = EventHelper.GetEventName<SampleClassEvent>();
@@ -23,7 +23,7 @@ public class EventHelperTests
     }
 
     [Fact]
-    public void Given_AnotherSampleEvent_When_GetEventNameIsCalled_Then_ReturnsFormattedEventName()
+    public void Given_Another_Sample_Event_When_Get_Event_Name_Is_Called_Then_Returns_Formatted_Event_Name()
     {
         // Act
         var eventName = EventHelper.GetEventName<AnotherSampleEvent>();
@@ -33,7 +33,7 @@ public class EventHelperTests
     }
 
     [Fact]
-    public void Given_EventWithEventSuffix_When_GetEventNameIsCalled_Then_RemovesEventSuffix()
+    public void Given_Event_With_Event_Suffix_When_Get_Event_Name_Is_Called_Then_Removes_Event_Suffix()
     {
         // Act
         var eventName = EventHelper.GetEventName<SampleClassEvent>();

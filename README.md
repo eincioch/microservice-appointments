@@ -102,6 +102,12 @@ This app keeps things clean, testable, and easy to automate:
 
 ## 🧪 Testing Is Everything
 
+Consistency is key, and this project follows the **Given_When_Then** naming convention for tests to ensure maintainability.  
+
+### Test Naming Pattern:  
+`Given_[Condition]_When_[Action]_Then_[ExpectedOutcome]`  
+- Example: `Given_Valid_Parameters_When_ExecuteAsync_Called_Then_Returns_Expected_Result`.
+
 ### 🎩 Unit Testing
 Unit tests keep things predictable:
 - Test the logic in your services, entities, domains, and use cases. 
@@ -122,6 +128,18 @@ Automation makes life easier. Here’s what this microservice automates:
 1. **Saves Time**: Automating tests means less debugging and more time for coding cool features. 😎
 2. **Confidence in Changes**: Know your updates won’t break the app. 😁
 3. **Smooth Deployments**: Automating checks makes the app stable and easy to scale. 🪜
+
+---
+
+## 🤖 Continuous Integration: Built for Reliability  
+
+This project features a lightweight **CI pipeline** to keep everything stable and running smoothly.  
+
+### 🛠️ Steps in the Pipeline:  
+1. **🧪 Run Unit Tests:** Ensures all core logic behaves as expected.  
+2. **🔀 Run Functional Tests:** Validates that endpoints and workflows are working correctly.  
+
+💡 With these automated steps, you can push with confidence knowing the app won’t break! 🤓  
 
 ---
 

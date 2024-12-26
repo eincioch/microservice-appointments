@@ -49,7 +49,7 @@ public class GetAppointmentsUseCaseTests
     #endregion Builder
 
     [Fact]
-    public async Task Given_RepositoryReturnsAppointments_When_ExecuteAsync_Then_ReturnsMappedDtos()
+    public async Task Given_Repository_Returns_Appointments_When_ExecuteAsync_Called_Then_Returns_Mapped_Dtos()
     {
         // Arrange
         var builder = new Builder();
@@ -92,7 +92,7 @@ public class GetAppointmentsUseCaseTests
     }
 
     [Fact]
-    public async Task Given_RepositoryReturnsEmptyList_When_ExecuteAsync_Then_ReturnsEmptyDtoList()
+    public async Task Given_Repository_Returns_Empty_List_When_ExecuteAsync_Called_Then_Returns_Empty_Dto_List()
     {
         // Arrange
         var builder = new Builder();
@@ -113,7 +113,7 @@ public class GetAppointmentsUseCaseTests
     }
 
     [Fact]
-    public void Given_NullDependencies_When_Constructed_Then_ThrowsArgumentNullException()
+    public void Given_Null_Dependencies_When_Constructed_Then_Throws_ArgumentNullException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() =>

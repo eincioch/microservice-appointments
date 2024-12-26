@@ -16,7 +16,7 @@ public class RequestLoggingMiddlewareTests
     private const string ValidRequestPath = "/test-path";
 
     [Fact]
-    public async Task Given_ValidRequest_When_InvokeAsync_Then_LogsIncomingRequestAndOutgoingResponse()
+    public async Task Given_Valid_Request_When_InvokeAsync_Called_Then_Logs_Incoming_Request_And_Outgoing_Response()
     {
         // Arrange
         var mockLogger = new Mock<ILogger<RequestLoggingMiddleware>>();

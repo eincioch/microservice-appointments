@@ -12,7 +12,7 @@ namespace Microservice.Appointments.FunctionalTests.Appointment;
 public class AppointmentGetByIdTests : AppointmentTestsBase
 {
     [Fact]
-    public async Task GetById_ReturnsOk_WhenIdIsValid()
+    public async Task Given_Valid_Id_When_GetById_Called_Then_Returns_Ok()
     {
         // Arrange
         var controller = CreateController();
@@ -45,7 +45,7 @@ public class AppointmentGetByIdTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task GetById_ThrowsNotFoundException_WhenIdDoesNotExist()
+    public async Task Given_Non_Existent_Id_When_GetById_Called_Then_Throws_NotFoundException()
     {
         // Arrange
         var controller = CreateController();
@@ -63,7 +63,7 @@ public class AppointmentGetByIdTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task GetById_ThrowsBadRequestException_WhenIdIsInvalid()
+    public async Task Given_Invalid_Id_When_GetById_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var controller = CreateController();

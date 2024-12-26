@@ -50,7 +50,7 @@ public class DeleteAppointmentUseCaseTests
     #endregion Builder
 
     [Fact]
-    public async Task Given_ValidParameters_When_ExecuteAsync_Then_DeletesAppointmentSuccessfully()
+    public async Task Given_Valid_Parameters_When_ExecuteAsync_Called_Then_Deletes_Appointment_Successfully()
     {
         // Arrange
         var builder = new Builder();
@@ -82,7 +82,7 @@ public class DeleteAppointmentUseCaseTests
     }
 
     [Fact]
-    public async Task Given_DomainValidationException_When_ExecuteAsync_Then_ThrowsBadRequestException()
+    public async Task Given_DomainValidationException_When_ExecuteAsync_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var builder = new Builder();
@@ -115,7 +115,7 @@ public class DeleteAppointmentUseCaseTests
     }
 
     [Fact]
-    public async Task Given_AppointmentNotFound_When_ExecuteAsync_Then_ThrowsNotFoundException()
+    public async Task Given_Appointment_Not_Found_When_ExecuteAsync_Called_Then_Throws_NotFoundException()
     {
         // Arrange
         var builder = new Builder();

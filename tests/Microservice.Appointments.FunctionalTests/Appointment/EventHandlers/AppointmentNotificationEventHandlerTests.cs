@@ -41,7 +41,7 @@ public class AppointmentNotificationEventHandlerTests
     #endregion Builder
 
     [Fact]
-    public async Task HandleAsync_ProcessesNotification_WhenAppointmentExists()
+    public async Task Given_Appointment_Exists_When_HandleAsync_Called_Then_Processes_Notification()
     {
         // Arrange
         var builder = new Builder();
@@ -81,7 +81,7 @@ public class AppointmentNotificationEventHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_DoesNotProcessNotification_WhenAppointmentDoesNotExist()
+    public async Task Given_Appointment_Does_Not_Exist_When_HandleAsync_Called_Then_Does_Not_Process_Notification()
     {
         // Arrange
         var builder = new Builder();
@@ -116,7 +116,7 @@ public class AppointmentNotificationEventHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_DoesNotProcessNotification_WhenEventTypeIsNotAppointmentReminder()
+    public async Task Given_Event_Type_Is_Not_Appointment_Reminder_When_HandleAsync_Called_Then_Does_Not_Process_Notification()
     {
         // Arrange
         var builder = new Builder();

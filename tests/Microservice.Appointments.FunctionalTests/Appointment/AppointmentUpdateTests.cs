@@ -16,7 +16,7 @@ public class AppointmentUpdateTests : AppointmentTestsBase
     private const int HoursInFuture = 1;
 
     [Fact]
-    public async Task Update_ReturnsOk_WhenAppointmentIsSuccessfullyUpdated()
+    public async Task Given_Valid_Appointment_When_Update_Called_Then_Returns_Ok()
     {
         // Arrange
         var controller = CreateController();
@@ -61,7 +61,7 @@ public class AppointmentUpdateTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task Update_ThrowsNotFoundException_WhenAppointmentNotExists()
+    public async Task Given_Non_Existent_Appointment_When_Update_Called_Then_Throws_NotFoundException()
     {
         // Arrange
         var controller = CreateController();
@@ -82,7 +82,7 @@ public class AppointmentUpdateTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task Update_ThrowsBadRequestException_WhenAppointmentIsInvalid()
+    public async Task Given_Invalid_Appointment_When_Update_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var controller = CreateController();

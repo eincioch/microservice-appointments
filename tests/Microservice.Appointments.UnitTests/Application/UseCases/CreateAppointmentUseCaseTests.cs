@@ -55,7 +55,7 @@ public class CreateAppointmentUseCaseTests
     #endregion Builder
 
     [Fact]
-    public async Task Given_ValidParameters_When_ExecuteAsync_Then_CreatesAppointmentSuccessfully()
+    public async Task Given_Valid_Parameters_When_ExecuteAsync_Called_Then_Creates_Appointment_Successfully()
     {
         // Arrange
         var builder = new Builder();
@@ -67,7 +67,6 @@ public class CreateAppointmentUseCaseTests
         builder.MockRepository
             .Setup(repo => repo.AddAsync(It.IsAny<AppointmentDomain>()))
             .ReturnsAsync(savedEntity);
-
 
         builder.MockMapper
             .Setup(mapper => mapper.ToCreatedMessage(It.IsAny<AppointmentDomain>()))
@@ -95,7 +94,7 @@ public class CreateAppointmentUseCaseTests
     }
 
     [Fact]
-    public async Task Given_DomainValidationException_When_ExecuteAsync_Then_ThrowsBadRequestException()
+    public async Task Given_DomainValidationException_When_ExecuteAsync_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var builder = new Builder();
@@ -124,7 +123,7 @@ public class CreateAppointmentUseCaseTests
     }
 
     [Fact]
-    public async Task Given_EventBusError_When_ExecuteAsync_Then_ThrowsException()
+    public async Task Given_Event_Bus_Error_When_ExecuteAsync_Called_Then_Throws_Exception()
     {
         // Arrange
         var builder = new Builder();
@@ -149,7 +148,7 @@ public class CreateAppointmentUseCaseTests
     }
 
     [Fact]
-    public void Given_NullDependencies_When_Constructed_Then_ThrowsArgumentNullException()
+    public void Given_Null_Dependencies_When_Constructed_Then_Throws_ArgumentNullException()
     {
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() =>

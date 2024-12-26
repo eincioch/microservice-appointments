@@ -16,7 +16,7 @@ public class ExceptionToHttpMapperTests
     private const string InternalServerErrorTitle = "Internal Server Error";
 
     [Fact]
-    public void Given_BadRequestException_When_Map_Then_Returns_BadRequest()
+    public void Given_BadRequestException_When_Map_Called_Then_Returns_Bad_Request()
     {
         // Arrange
         var mapper = new ExceptionToHttpMapper();
@@ -31,7 +31,7 @@ public class ExceptionToHttpMapperTests
     }
 
     [Fact]
-    public void Given_NotFoundException_When_Map_Then_Returns_NotFound()
+    public void Given_NotFoundException_When_Map_Called_Then_Returns_Not_Found()
     {
         // Arrange
         var mapper = new ExceptionToHttpMapper();
@@ -46,7 +46,7 @@ public class ExceptionToHttpMapperTests
     }
 
     [Fact]
-    public void Given_GenericException_When_Map_Then_Returns_InternalServerError()
+    public void Given_Generic_Exception_When_Map_Called_Then_Returns_Internal_Server_Error()
     {
         // Arrange
         var mapper = new ExceptionToHttpMapper();
@@ -61,7 +61,7 @@ public class ExceptionToHttpMapperTests
     }
 
     [Fact]
-    public void ExceptionToHttpMapper_Implements_IExceptionToHttpMapper()
+    public void Given_ExceptionToHttpMapper_When_Checked_Then_Implements_IExceptionToHttpMapper()
     {
         // Arrange & Act
         var mapper = new ExceptionToHttpMapper();

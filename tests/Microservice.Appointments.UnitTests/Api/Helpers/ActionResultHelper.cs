@@ -12,7 +12,7 @@ public class ActionResultHelperTests
     private const string IdField = "id";
 
     [Fact]
-    public void Given_ValidParameters_When_CreatedIsCalled_Then_ReturnsCorrectCreatedAtActionResult()
+    public void Given_Valid_Parameters_When_Created_Is_Called_Then_Returns_Correct_CreatedAtActionResult()
     {
         // Arrange
         var expectedActionName = _fixture.Create<string>();

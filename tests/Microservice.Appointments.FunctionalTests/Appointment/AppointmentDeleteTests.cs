@@ -12,7 +12,7 @@ namespace Microservice.Appointments.FunctionalTests.Appointment;
 public class AppointmentDeleteTests : AppointmentTestsBase
 {
     [Fact]
-    public async Task Delete_ReturnsNoContent_WhenAppointmentIsSuccessfullyDeleted()
+    public async Task Given_Existing_Appointment_When_Delete_Called_Then_Returns_No_Content()
     {
         // Arrange
         var controller = CreateController();
@@ -34,7 +34,7 @@ public class AppointmentDeleteTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task Delete_ThrowsNotFoundException_WhenAppointmentNotExists()
+    public async Task Given_Non_Existent_Appointment_When_Delete_Called_Then_Throws_NotFoundException()
     {
         // Arrange
         var controller = CreateController();
@@ -52,7 +52,7 @@ public class AppointmentDeleteTests : AppointmentTestsBase
     }
 
     [Fact]
-    public async Task Delete_ThrowsBadRequestException_WhenDomainValidationExceptionOccurs()
+    public async Task Given_Completed_Appointment_When_Delete_Called_Then_Throws_BadRequestException()
     {
         // Arrange
         var controller = CreateController();

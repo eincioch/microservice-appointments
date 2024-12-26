@@ -49,7 +49,7 @@ public class AppointmentNotificationHandlerTests
     #endregion Builder
 
     [Fact]
-    public async Task HandleAsync_DoesNothing_WhenEventTypeIsNotAppointmentReminder()
+    public async Task Given_Event_Type_Is_Not_Appointment_Reminder_When_HandleAsync_Called_Then_Does_Nothing()
     {
         // Arrange
         var builder = new Builder();
@@ -66,7 +66,7 @@ public class AppointmentNotificationHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_LogsWarning_WhenAppointmentNotFound()
+    public async Task Given_Appointment_Not_Found_When_HandleAsync_Called_Then_Logs_Warning()
     {
         // Arrange
         var builder = new Builder();
@@ -91,7 +91,7 @@ public class AppointmentNotificationHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_UpdatesAppointmentAndLogsInfo_WhenAppointmentFound()
+    public async Task Given_Appointment_Found_When_HandleAsync_Called_Then_Updates_Appointment_And_Logs_Info()
     {
         // Arrange
         var builder = new Builder();
@@ -123,7 +123,7 @@ public class AppointmentNotificationHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_ThrowsException_WhenRepositoryThrowsException()
+    public async Task Given_Repository_Throws_Exception_When_HandleAsync_Called_Then_Throws_Exception()
     {
         // Arrange
         var builder = new Builder();
