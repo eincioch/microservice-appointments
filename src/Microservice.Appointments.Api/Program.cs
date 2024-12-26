@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ServiceInitializer.InitializeContainers();
+
 builder.Services.AddDbContext<AppointmentsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -20,7 +22,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-ServiceInitializer.InitializeInfrastructure(app.Services);
+ServiceInitializer.ApplyMigrations(app.Services);
 
 if (app.Environment.IsDevelopment())
 {

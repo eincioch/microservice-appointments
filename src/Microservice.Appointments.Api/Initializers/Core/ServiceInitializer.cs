@@ -4,7 +4,7 @@ namespace Microservice.Appointments.Api.Initializers.Core;
 
 public static class ServiceInitializer
 {
-    public static void InitializeInfrastructure(IServiceProvider serviceProvider)
+    public static void InitializeContainers()
     {
         var initializers = new ServiceInitializerBase[]
         {
@@ -13,7 +13,10 @@ public static class ServiceInitializer
         };
 
         Array.ForEach(initializers, service => service.SetupService());
+    }
 
+    public static void ApplyMigrations(IServiceProvider serviceProvider)
+    {
         var entityFrameworkInitializer = new EntityFrameworkInitializer(
             serviceProvider,
             serviceProvider.GetRequiredService<ILogger<EntityFrameworkInitializer>>());
