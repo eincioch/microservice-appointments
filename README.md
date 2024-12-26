@@ -1,3 +1,4 @@
+
 <p align="center">
   <a href="https://github.com/maurogioberti" target="_blank">
     <img alt="Mauro Gioberti" src="https://www.maurogioberti.com/assets/profile/maurogioberti-avatar.png" width="200" />
@@ -33,6 +34,26 @@ The Appointments Microservice is a **testing playground** disguised as a backend
 - **Unit Testing**: Keeps your core logic solid, even when the code changes.  
 - **Functional Testing**: Makes sure the app behaves how it should in the real world.  
 - **Automation**: 🚀 This is where the fun begins! Verifies the integrity of the microservice implementation by hitting endpoints or interacting with bus services.
+
+---
+
+## 📂 How It’s Organized
+
+This app keeps things clean, testable, and easy to automate:  
+
+```
+/Microservice.Appointments.sln # Main solution
+/Microservice.Appointments.IntegrityAssurance.sln # Testing solution
+/src
+├── Api               # Your API controllers, middlewares
+├── Application       # Use cases, DTOs, and services
+├── Domain            # Core business logic like entities and events
+├── Infrastructure    # Database, repositories, and external integrations
+/tests
+├── FunctionalTests   # End-to-end tests for APIs
+├── UnitTests         # Isolated tests for logic and services
+└── IntegrationTests  # Tests that touch the database or external services
+```
 
 ---
 
@@ -80,26 +101,6 @@ Everything is pre-configured and ready to go. Just hit "Run" and start testing! 
 
 ---
 
-## 📂 How It’s Organized
-
-This app keeps things clean, testable, and easy to automate:  
-
-```
-/Microservice.Appointments.sln # Main solution
-/Microservice.Appointments.IntegrityAssurance.sln # Testing solution
-/src
-├── Api               # Your API controllers, middlewares
-├── Application       # Use cases, DTOs, and services
-├── Domain            # Core business logic like entities and events
-├── Infrastructure    # Database, repositories, and external integrations
-/tests
-├── FunctionalTests   # End-to-end tests for APIs
-├── UnitTests         # Isolated tests for logic and services
-└── IntegrationTests  # Tests that touch the database or external services
-```
-
----
-
 ## 🧪 Testing Is Everything
 
 Consistency is key, and this project follows the **Given_When_Then** naming convention for tests to ensure maintainability.  
@@ -128,6 +129,23 @@ Automation makes life easier. Here’s what this microservice automates:
 1. **Saves Time**: Automating tests means less debugging and more time for coding cool features. 😎
 2. **Confidence in Changes**: Know your updates won’t break the app. 😁
 3. **Smooth Deployments**: Automating checks makes the app stable and easy to scale. 🪜
+
+---
+
+## 🚌 Event Bus: Messaging Made Simple  
+
+This microservice uses **RabbitMQ** 🐇 to handle domain events asynchronously.  
+
+**Where to manage it?**  
+👉 Go to [RabbitMQ Management UI](http://localhost:15672) and log in to see everything in action.  
+
+**Queues you’ll find:**  
+- `appointment.created` 🟢: Triggered when a new appointment is created.  
+- `appointment.changed` 🔄: Handles updates to appointments.  
+- `appointment.deleted` ❌: Removes appointment data from the system.  
+- `appointment.notification` 📩: Processes notifications and updates relevant data.  
+
+💡 The `appointment.notification` queue listens for incoming events and automatically updates appointments when it receives a notification.  
 
 ---
 
