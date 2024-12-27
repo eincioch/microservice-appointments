@@ -5,21 +5,21 @@ public static class IntegrityAssuranceInitializer
     private const string IntegrityAssuranceMode = "integrityassurance";
     private static ILogger Logger => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger(nameof(ServiceInitializer));
 
-    public static void ExecuteScripts(string environment)
+    public static void RunTestScripts(string environment)
     {
         if (string.Equals(environment, IntegrityAssuranceMode, StringComparison.OrdinalIgnoreCase))
         {
-            var sqlScriptsInitializer = new SqlScriptsInitializer(Logger);
-            sqlScriptsInitializer.ApplyScripts();
+            var sqlScriptsInitializer = new SqlScriptsRunnerInitializer(Logger);
+            sqlScriptsInitializer.ApplyTestScripts();
         }
     }
 
-    public static void RecreateDatabase(string environment)
+    public static void RunSetupScripts(string environment)
     {
         if (string.Equals(environment, IntegrityAssuranceMode, StringComparison.OrdinalIgnoreCase))
         {
-            var sqlScriptsInitializer = new SqlScriptsInitializer(Logger);
-            sqlScriptsInitializer.DropAndCreateDatabase();
+            var sqlScriptsInitializer = new SqlScriptsRunnerInitializer(Logger);
+            sqlScriptsInitializer.ApplySetupScripts();
         }
     }
 }

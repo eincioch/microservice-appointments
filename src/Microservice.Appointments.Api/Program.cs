@@ -9,7 +9,7 @@ var environment = builder.Environment.EnvironmentName;
 ServiceInitializer.UseConfiguration(builder.Configuration, environment);
 ServiceInitializer.InitializeContainers(environment);
 
-IntegrityAssuranceInitializer.RecreateDatabase(environment);
+IntegrityAssuranceInitializer.RunSetupScripts(environment);
 
 builder.Services.AddDbContext(builder.Configuration);
 
@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 DbContext.AddMigrations(app.Services);
-IntegrityAssuranceInitializer.ExecuteScripts(environment);
+IntegrityAssuranceInitializer.RunTestScripts(environment);
 
 app.UseSwagger();
 app.UseSwaggerUI();
