@@ -1,15 +1,17 @@
 using Microservice.Appointments.Api.DependencyInjection;
 using Microservice.Appointments.Api.Initializers.Core;
 using Microservice.Appointments.Api.Middlewares;
-using Microservice.Appointments.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ServiceInitializer.InitializeContainers();
+var environment = builder.Environment.EnvironmentName;
 
-builder.Services.AddDbContext<AppointmentsDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+ServiceInitializer.UseConfiguration(builder.Configuration, environment);
+ServiceInitializer.InitializeContainers(environment);
+
+IntegrityAssuranceInitializer.RecreateDatabase(environment);
+
+builder.Services.AddDbContext(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddUseCases();
@@ -20,15 +22,14 @@ builder.Services.AddRepositories();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
-ServiceInitializer.ApplyMigrations(app.Services);
+DbContext.AddMigrations(app.Services);
+IntegrityAssuranceInitializer.ExecuteScripts(environment);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();

@@ -1,13 +1,13 @@
 ﻿services:
   rabbitmq-dev:
     image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
+    container_name: rabbitmq-development
     ports:
       - "5672:5672"
       - "15672:15672"
   sqlserver-dev:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserver
+    container_name: sqlserver-development
     environment:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"

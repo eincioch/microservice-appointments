@@ -2,8 +2,8 @@
 
 namespace Microservice.Appointments.Api.Initializers;
 
-public class RabbitMqInitializer : ServiceInitializerBase
+public class RabbitMqInitializer(string environment) : ServiceInitializerBase(environment)
 {
-    protected override string ContainerName => "rabbitmq";
-    protected override int StartupDelay => 10000;
+    protected override string ContainerName => $"rabbitmq-{environment}";
+    protected override int StartupDelay => 15000;
 }

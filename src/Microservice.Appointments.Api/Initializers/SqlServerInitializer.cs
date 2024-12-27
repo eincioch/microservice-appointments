@@ -2,8 +2,8 @@
 
 namespace Microservice.Appointments.Api.Initializers;
 
-public class SqlServerInitializer : ServiceInitializerBase
+public class SqlServerInitializer(string environment) : ServiceInitializerBase(environment)
 {
-    protected override string ContainerName => "sqlserver";
+    protected override string ContainerName => $"rabbitmq-{environment}";
     protected override int StartupDelay => 30000;
 }

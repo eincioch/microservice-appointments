@@ -25,11 +25,11 @@ public sealed class RabbitMqEventBus(IConnection connection, IModel channel, str
     /// Asynchronously creates and initializes a new instance of <see cref="RabbitMqEventBus"/>.
     /// </summary>
     /// <param name="hostName">The RabbitMQ host name.</param>
+    /// <param name="port">The port number on which the RabbitMQ server is listening.</param>
     /// <param name="exchangeName">The name of the Exchange to use for publishing events.</param>
     /// <param name="queueName">The name of the Queue</param>
     /// <returns>A newly initialized <see cref="RabbitMqEventBus"/>.</returns>
-
-    public static Task<RabbitMqEventBus> CreateAsync(string hostName, string exchangeName, string queueName)
+    public static Task<RabbitMqEventBus> CreateAsync(string hostName, int port, string exchangeName, string queueName)
     {
         if (string.IsNullOrWhiteSpace(hostName))
             throw new ArgumentNullException(nameof(hostName));
@@ -39,7 +39,7 @@ public sealed class RabbitMqEventBus(IConnection connection, IModel channel, str
 
         try
         {
-            var factory = new ConnectionFactory { HostName = hostName };
+            var factory = new ConnectionFactory { HostName = hostName, Port = port };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
 

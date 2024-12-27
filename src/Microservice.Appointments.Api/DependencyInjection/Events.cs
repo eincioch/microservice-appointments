@@ -14,10 +14,11 @@ public static partial class DependencyInjection
     {
         //TODO: Use IConfiguration.
         var host = configuration["EventBus:Host"];
+        var port = Convert.ToInt32(configuration["EventBus:Port"]);
         var exchangeName = configuration["EventBus:ExchangeName"];
         var queueName = configuration["EventBus:QueueName"];
 
-        var eventBus = RabbitMqEventBus.CreateAsync(host!, exchangeName!, queueName!)
+        var eventBus = RabbitMqEventBus.CreateAsync(host!, port, exchangeName!, queueName!)
             .ConfigureAwait(false)
             .GetAwaiter()
             .GetResult();

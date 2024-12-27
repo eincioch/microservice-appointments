@@ -4,23 +4,31 @@ namespace Microservice.Appointments.Api.Initializers.Core;
 
 public static class ServiceInitializer
 {
-    public static void InitializeContainers()
+    private static ILogger Logger => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger(nameof(ServiceInitializer));
+    private const string AppsettingsFileName = "appsettings";
+    private const string AppsettingsExtension = "json";
+
+    public static void UseConfiguration(IConfigurationBuilder configurationBuilder, string environment)
     {
+        configurationBuilder
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile($".{AppsettingsExtension}", optional: true, reloadOnChange: true)
+            .AddJsonFile($"{AppsettingsFileName}.{environment}.{AppsettingsExtension}", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+    }
+
+    public static void InitializeContainers(string environment)
+    {
+        Logger.LogInformation($"Running in {environment} environment mode...");
+
+        var environmentPattern = environment.ToLower();
         var initializers = new ServiceInitializerBase[]
         {
-            new RabbitMqInitializer(),
-            new SqlServerInitializer()
+            new RabbitMqInitializer(environmentPattern),
+            new SqlServerInitializer(environmentPattern)
         };
 
-        Array.ForEach(initializers, service => service.SetupService());
+        Array.ForEach(initializers, service => service.InitializeContainer());
     }
 
-    public static void ApplyMigrations(IServiceProvider serviceProvider)
-    {
-        var entityFrameworkInitializer = new EntityFrameworkInitializer(
-            serviceProvider,
-            serviceProvider.GetRequiredService<ILogger<EntityFrameworkInitializer>>());
-
-        entityFrameworkInitializer.ApplyMigrations();
-    }
 }
