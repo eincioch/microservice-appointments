@@ -1,12 +1,12 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-using Microservice.Appointments.Application.EventBus;
+using Microservice.Appointments.IntegrationTests.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
-namespace Microservice.Appointments.Infrastructure.EventBus;
+namespace Microservice.Appointments.IntegrationTests.Core.Infrastructure;
 
 /// <summary>
 /// Event bus implementation using RabbitMQ as the underlying messaging infrastructure.
@@ -59,6 +59,12 @@ public sealed class RabbitMqEventBus(IConnection connection, IModel channel, str
         }
     }
 
+    /// <summary>
+    /// Publishes an event message asynchronously to the underlying message broker.
+    /// </summary>
+    /// <typeparam name="T">The type of the event payload.</typeparam>
+    /// <param name="event">The event payload to publish.</param>
+    /// <param name="routingKey">The routing key to use when publishing the event.</param>
     public Task PublishAsync<T>(T @event, string routingKey)
     {
         if (_disposed)
@@ -93,9 +99,6 @@ public sealed class RabbitMqEventBus(IConnection connection, IModel channel, str
     {
         if (_disposed)
             throw new ObjectDisposedException(nameof(RabbitMqEventBus));
-
-        if (string.IsNullOrWhiteSpace(routingKey))
-            throw new ArgumentNullException(nameof(routingKey));
 
         if (handler == null)
             throw new ArgumentNullException(nameof(handler));
