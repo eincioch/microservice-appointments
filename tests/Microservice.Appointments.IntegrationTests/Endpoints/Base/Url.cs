@@ -8,5 +8,7 @@ public class Url
         public static string GetAll => $"{BaseEndpoint}";
         public static string GetById(int id) => $"{BaseEndpoint}/{id}";
         public static string Post => $"{BaseEndpoint}";
+        public static string Put(int id) => $"{BaseEndpoint}/{id}";
+        public static string Patch(int id) => $"{BaseEndpoint}/{id}/status";
     }
 }

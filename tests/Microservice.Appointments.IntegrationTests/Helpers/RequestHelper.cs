@@ -9,16 +9,36 @@ public static class RequestHelper
 
     public static RestRequest GetRequest(string endpoint)
     {
-        var request = new RestRequest(endpoint, Method.Get);
-        request.AddHeader(AcceptHeader, ApplicationJson);
+        var request = CreateRequest(endpoint, Method.Get);
         return request;
     }
 
     public static RestRequest PostRequest<T>(string endpoint, T payload) where T : class
     {
-        var request = new RestRequest(endpoint, Method.Post);
-        request.AddHeader(AcceptHeader, ApplicationJson);
+        var request = CreateRequest(endpoint, Method.Post);
         request.AddJsonBody(payload);
+        return request;
+    }
+
+    public static RestRequest PutRequest<T>(string endpoint, T payload) where T : class
+    {
+        var request = CreateRequest(endpoint, Method.Put);
+        request.AddJsonBody(payload);
+        return request;
+    }
+
+    public static RestRequest PatchRequest<T>(string endpoint, T payload) where T : class
+    {
+        var request = CreateRequest(endpoint, Method.Patch);
+        request.AddJsonBody(payload);
+        return request;
+    }
+
+
+    private static RestRequest CreateRequest(string endpoint, Method method)
+    {
+        var request = new RestRequest(endpoint, method);
+        request.AddHeader(AcceptHeader, ApplicationJson);
         return request;
     }
 }
