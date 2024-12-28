@@ -6,5 +6,6 @@ public class Url
     {
         private static string BaseEndpoint => "Appointments";
         public static string GetAll => $"{BaseEndpoint}";
+        public static string GetById(int id)=> $"{BaseEndpoint}/{id}";
     }
 }
