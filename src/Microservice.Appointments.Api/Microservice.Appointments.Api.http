@@ -1,16 +1,16 @@
 # Base URL
-@Microservice.Appointments.Api_HostAddress = http://localhost:5281
+@Microservice_Appointments_HostAddress = http://localhost:5281
 
 ### Get all appointments
-GET {{Microservice.Appointments.Api_HostAddress}}/appointments/
+GET {{Microservice_Appointments_HostAddress}}/appointments
 Accept: application/json
 
 ### Get appointment by ID
-GET {{Microservice.Appointments.Api_HostAddress}}/appointments/{{id}}
+GET {{Microservice_Appointments_HostAddress}}/appointments/{{id}}
 Accept: application/json
 
 ### Create a new appointment
-POST {{Microservice.Appointments.Api_HostAddress}}/appointments/
+POST {{Microservice_Appointments_HostAddress}}/appointments
 Content-Type: application/json
 Accept: application/json
 
@@ -19,4 +19,30 @@ Accept: application/json
   "startTime": "2024-01-01T10:00:00Z",
   "endTime": "2024-01-01T11:00:00Z",
   "description": "This is a sample description"
+}
+
+### Update an existing appointment
+PUT {{Microservice_Appointments_HostAddress}}/appointments/{{id}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Updated Appointment",
+  "startTime": "2024-01-01T12:00:00Z",
+  "endTime": "2024-01-01T13:00:00Z",
+  "description": "This is an updated description",
+  "status": 1
+}
+
+### Delete an appointment
+DELETE {{Microservice_Appointments_HostAddress}}/appointments/{{id}}
+Accept: application/json
+
+### Update appointment status
+PATCH {{Microservice_Appointments_HostAddress}}/appointments/{{id}}/status
+Content-Type: application/json
+Accept: application/json
+
+{
+  "status": 2
 }
