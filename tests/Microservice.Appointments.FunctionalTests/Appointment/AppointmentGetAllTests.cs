@@ -16,7 +16,13 @@ public class AppointmentGetAllTests : AppointmentTestsBase
         var controller = CreateController();
         var appointmentDomains = CreateDomainList();
         var appointmentDtos = appointmentDomains
-            .Select(domain => new AppointmentDto(domain.Id, domain.Title, domain.StartTime, domain.EndTime, domain.Description, domain.Status))
+            .Select(domain => new AppointmentDto(
+                domain.Id,
+                domain.Title,
+                domain.StartTime,
+                domain.EndTime,
+                domain.Description,
+                domain.Status))
             .ToList();
 
         MockRepository
@@ -27,9 +33,12 @@ public class AppointmentGetAllTests : AppointmentTestsBase
         var response = await controller.GetAll();
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(response);
+        var actionResult = Assert.IsType<ActionResult<IEnumerable<AppointmentDto>>>(response);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var result = Assert.IsType<List<AppointmentDto>>(okResult.Value);
+
         Assert.Equal(appointmentDtos.Count, result.Count);
+        Assert.True(appointmentDtos.SequenceEqual(result));
     }
 
     [Fact]
@@ -46,8 +55,10 @@ public class AppointmentGetAllTests : AppointmentTestsBase
         var response = await controller.GetAll();
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(response);
+        var actionResult = Assert.IsType<ActionResult<IEnumerable<AppointmentDto>>>(response);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var result = Assert.IsType<List<AppointmentDto>>(okResult.Value);
+
         Assert.Empty(result);
     }
 }

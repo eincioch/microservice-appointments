@@ -1,6 +1,7 @@
 using Microservice.Appointments.Api.Helpers;
+using Microservice.Appointments.Api.Requests;
+using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Application.UseCases.Abstractions;
-using Microservice.Appointments.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservice.Appointments.Api.Controllers;
@@ -22,54 +23,66 @@ public class AppointmentsController(IGetAppointmentsUseCase appointmentsUseCase,
     private readonly IDeleteAppointmentUseCase _deleteAppointmentUseCase = deleteAppointmentUseCase;
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<AppointmentDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAll()
     {
         var appointments = await _appointmentsUseCase.ExecuteAsync();
         return Ok(appointments);
     }
 
     [HttpGet("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<AppointmentDto>> GetById(int id)
     {
-        var appointments = await _getAppointmentByIdUseCase.ExecuteAsync(id);
-        return Ok(appointments);
+        var appointment = await _getAppointmentByIdUseCase.ExecuteAsync(id);
+        return Ok(appointment);
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create(string title, DateTime startTime, DateTime endTime, string description)
+    public async Task<IActionResult> Create([FromBody] CreateAppointmentRequest request)
     {
-        var appointment = await _createAppointmentUseCase.ExecuteAsync(title, startTime, endTime, description);
+        var appointment = await _createAppointmentUseCase.ExecuteAsync(
+            request.Title,
+            request.StartTime,
+            request.EndTime,
+            request.Description
+        );
         return ActionResultHelper.Created(nameof(GetById), ControllerContext.ActionDescriptor.ControllerName, appointment.Id, appointment);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update(int id, string title, DateTime startTime, DateTime endTime, string description, AppointmentStatus status)
+    public async Task<ActionResult<AppointmentDto>> Update(int id, [FromBody] UpdateAppointmentRequest request)
     {
-        var result = await _updateAppointmentUseCase.ExecuteAsync(id, title, startTime, endTime, description, status);
+        var result = await _updateAppointmentUseCase.ExecuteAsync(
+            id,
+            request.Title,
+            request.StartTime,
+            request.EndTime,
+            request.Description,
+            request.Status
+        );
         return Ok(result);
     }
 
     [HttpPatch("{id}/status")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AppointmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateStatus(int id, AppointmentStatus status)
+    public async Task<ActionResult<AppointmentDto>> UpdateStatus(int id, [FromBody] UpdateAppointmentStatusRequest request)
     {
-        var result = await _updateAppointmentStatusUseCase.ExecuteAsync(id, status);
+        var result = await _updateAppointmentStatusUseCase.ExecuteAsync(id, request.Status);
         return Ok(result);
     }
 

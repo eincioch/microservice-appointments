@@ -34,8 +34,10 @@ public class AppointmentGetByIdTests : AppointmentTestsBase
         var response = await controller.GetById(appointmentDomain.Id);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(response);
+        var actionResult = Assert.IsType<ActionResult<AppointmentDto>>(response);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var result = Assert.IsType<AppointmentDto>(okResult.Value);
+
         Assert.Equal(appointmentDto.Id, result.Id);
         Assert.Equal(appointmentDto.Title, result.Title);
         Assert.Equal(appointmentDto.StartTime, result.StartTime);

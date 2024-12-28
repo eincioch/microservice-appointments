@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microservice.Appointments.Api.Controllers;
+using Microservice.Appointments.Api.Requests;
 using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Application.UseCases.Abstractions;
 using Microservice.Appointments.Domain.Enums;
@@ -79,7 +80,8 @@ public class AppointmentsControllerTests
         var result = await controller.GetAll();
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        var actionResult = Assert.IsType<ActionResult<IEnumerable<AppointmentDto>>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(appointments, okResult.Value);
     }
 
@@ -107,7 +109,8 @@ public class AppointmentsControllerTests
         var result = await controller.GetById(builder.Fixture.Create<int>());
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        var actionResult = Assert.IsType<ActionResult<AppointmentDto>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(appointment, okResult.Value);
     }
 
@@ -119,8 +122,19 @@ public class AppointmentsControllerTests
         var mockCreateAppointmentUseCase = new Mock<ICreateAppointmentUseCase>();
 
         var appointment = builder.Fixture.Create<AppointmentDto>();
+        var createRequest = new CreateAppointmentRequest(
+            appointment.Title,
+            appointment.StartTime,
+            appointment.EndTime,
+            appointment.Description
+        );
+
         mockCreateAppointmentUseCase
-            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+            .Setup(useCase => useCase.ExecuteAsync(
+                createRequest.Title,
+                createRequest.StartTime,
+                createRequest.EndTime,
+                createRequest.Description))
             .ReturnsAsync(appointment);
 
         var controller = builder.Build(
@@ -133,7 +147,7 @@ public class AppointmentsControllerTests
         );
 
         // Act
-        var result = await controller.Create(appointment.Title, appointment.StartTime, appointment.EndTime, appointment.Description);
+        var result = await controller.Create(createRequest);
 
         // Assert
         var createdResult = Assert.IsType<CreatedAtActionResult>(result);
@@ -151,8 +165,22 @@ public class AppointmentsControllerTests
         var mockUpdateAppointmentUseCase = new Mock<IUpdateAppointmentUseCase>();
 
         var appointment = builder.Fixture.Create<AppointmentDto>();
+        var updateRequest = new UpdateAppointmentRequest(
+            appointment.Title,
+            appointment.StartTime,
+            appointment.EndTime,
+            appointment.Description,
+            AppointmentStatus.Scheduled
+        );
+
         mockUpdateAppointmentUseCase
-            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<AppointmentStatus>()))
+            .Setup(useCase => useCase.ExecuteAsync(
+                appointment.Id,
+                updateRequest.Title,
+                updateRequest.StartTime,
+                updateRequest.EndTime,
+                updateRequest.Description,
+                updateRequest.Status))
             .ReturnsAsync(appointment);
 
         var controller = builder.Build(
@@ -165,10 +193,11 @@ public class AppointmentsControllerTests
         );
 
         // Act
-        var result = await controller.Update(appointment.Id, appointment.Title, appointment.StartTime, appointment.EndTime, appointment.Description, AppointmentStatus.Scheduled);
+        var result = await controller.Update(appointment.Id, updateRequest);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        var actionResult = Assert.IsType<ActionResult<AppointmentDto>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(appointment, okResult.Value);
     }
 
@@ -180,8 +209,10 @@ public class AppointmentsControllerTests
         var mockUpdateAppointmentStatusUseCase = new Mock<IUpdateAppointmentStatusUseCase>();
 
         var appointment = builder.Fixture.Create<AppointmentDto>();
+        var updateStatusRequest = new UpdateAppointmentStatusRequest(AppointmentStatus.Completed);
+
         mockUpdateAppointmentStatusUseCase
-            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<int>(), It.IsAny<AppointmentStatus>()))
+            .Setup(useCase => useCase.ExecuteAsync(appointment.Id, updateStatusRequest.Status))
             .ReturnsAsync(appointment);
 
         var controller = builder.Build(
@@ -194,10 +225,11 @@ public class AppointmentsControllerTests
         );
 
         // Act
-        var result = await controller.UpdateStatus(appointment.Id, AppointmentStatus.Completed);
+        var result = await controller.UpdateStatus(appointment.Id, updateStatusRequest);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        var actionResult = Assert.IsType<ActionResult<AppointmentDto>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(appointment, okResult.Value);
     }
 

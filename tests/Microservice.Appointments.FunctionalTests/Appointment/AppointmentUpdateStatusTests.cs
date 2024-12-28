@@ -1,4 +1,5 @@
 using AutoFixture;
+using Microservice.Appointments.Api.Requests;
 using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Domain.Enums;
 using Microservice.Appointments.Domain.Exceptions;
@@ -20,7 +21,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
         // Arrange
         var controller = CreateController();
         var appointmentDomain = CreateDomain();
-        var newStatus = AppointmentStatus.Completed;
+        var request = new UpdateAppointmentStatusRequest(AppointmentStatus.Completed);
 
         MockRepository
             .Setup(repo => repo.GetAsync(It.IsAny<int>()))
@@ -31,14 +32,15 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
             .ReturnsAsync(appointmentDomain);
 
         // Act
-        var response = await controller.UpdateStatus(appointmentDomain.Id, newStatus);
+        var response = await controller.UpdateStatus(appointmentDomain.Id, request);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(response);
+        var actionResult = Assert.IsType<ActionResult<AppointmentDto>>(response);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var result = Assert.IsType<AppointmentDto>(okResult.Value);
 
         Assert.Equal(appointmentDomain.Id, result.Id);
-        Assert.Equal(newStatus, result.Status);
+        Assert.Equal(request.Status, result.Status);
     }
 
     [Fact]
@@ -47,7 +49,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
         // Arrange
         var controller = CreateController();
         var nonExistentId = Fixture.Create<int>();
-        var newStatus = AppointmentStatus.Completed;
+        var request = new UpdateAppointmentStatusRequest(AppointmentStatus.Completed);
 
         MockRepository
             .Setup(repo => repo.GetAsync(nonExistentId))
@@ -55,7 +57,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            controller.UpdateStatus(nonExistentId, newStatus));
+            controller.UpdateStatus(nonExistentId, request));
 
         Assert.Equal($"Appointment with id '{nonExistentId}' was not found.", exception.Message);
     }
@@ -66,7 +68,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
         // Arrange
         var controller = CreateController();
         var appointmentDomain = CreateDomain();
-        var invalidStatus = (AppointmentStatus)999;
+        var request = new UpdateAppointmentStatusRequest((AppointmentStatus)999);
 
         MockRepository
             .Setup(repo => repo.GetAsync(It.IsAny<int>()))
@@ -74,7 +76,7 @@ public class AppointmentUpdateStatusTests : AppointmentTestsBase
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
-            controller.UpdateStatus(appointmentDomain.Id, invalidStatus));
+            controller.UpdateStatus(appointmentDomain.Id, request));
 
         Assert.Equal(ValidationErrorMessage, exception.Message);
     }

@@ -1,4 +1,5 @@
 using AutoFixture;
+using Microservice.Appointments.Api.Requests;
 using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Domain.Enums;
 using Microservice.Appointments.Domain.Exceptions;
@@ -30,6 +31,14 @@ public class AppointmentUpdateTests : AppointmentTestsBase
             appointmentDomain.Status
         );
 
+        var updateRequest = new UpdateAppointmentRequest(
+            appointmentDto.Title,
+            appointmentDto.StartTime,
+            appointmentDto.EndTime,
+            appointmentDto.Description,
+            appointmentDto.Status
+        );
+
         MockRepository
             .Setup(repo => repo.GetAsync(It.IsAny<int>()))
             .ReturnsAsync(appointmentDomain);
@@ -39,17 +48,11 @@ public class AppointmentUpdateTests : AppointmentTestsBase
             .ReturnsAsync(appointmentDomain);
 
         // Act
-        var response = await controller.Update(
-            appointmentDto.Id,
-            appointmentDto.Title,
-            appointmentDto.StartTime,
-            appointmentDto.EndTime,
-            appointmentDto.Description,
-            appointmentDto.Status
-        );
+        var response = await controller.Update(appointmentDto.Id, updateRequest);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(response);
+        var actionResult = Assert.IsType<ActionResult<AppointmentDto>>(response);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var result = Assert.IsType<AppointmentDto>(okResult.Value);
 
         Assert.Equal(appointmentDto.Id, result.Id);
@@ -65,18 +68,23 @@ public class AppointmentUpdateTests : AppointmentTestsBase
     {
         // Arrange
         var controller = CreateController();
-        var invalidTitle = string.Empty;
-        var startTime = DateTime.UtcNow.AddHours(HoursInFuture);
-        var endTime = DateTime.UtcNow;
+        var updateRequest = new UpdateAppointmentRequest(
+            string.Empty,
+            DateTime.UtcNow.AddHours(HoursInFuture),
+            DateTime.UtcNow,
+            Fixture.Create<string>(),
+            AppointmentStatus.Scheduled
+        );
+
         var nonExistentId = Fixture.Create<int>();
 
         MockRepository
-            .Setup(repo => repo.GetAsync(nonExistentId))!
+            .Setup(repo => repo.GetAsync(nonExistentId))
             .ReturnsAsync((AppointmentDomain)null!);
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
-            controller.Update(nonExistentId, invalidTitle, startTime, endTime, Fixture.Create<string>(), AppointmentStatus.Scheduled));
+            controller.Update(nonExistentId, updateRequest));
 
         Assert.Equal($"Appointment with id '{nonExistentId}' was not found.", exception.Message);
     }
@@ -86,9 +94,14 @@ public class AppointmentUpdateTests : AppointmentTestsBase
     {
         // Arrange
         var controller = CreateController();
-        var invalidTitle = string.Empty;
-        var startTime = DateTime.UtcNow.AddHours(HoursInFuture);
-        var endTime = DateTime.UtcNow;
+        var updateRequest = new UpdateAppointmentRequest(
+            string.Empty,
+            DateTime.UtcNow.AddHours(HoursInFuture),
+            DateTime.UtcNow,
+            Fixture.Create<string>(),
+            AppointmentStatus.Scheduled
+        );
+
         var appointmentDomain = CreateDomain();
 
         MockRepository
@@ -97,7 +110,7 @@ public class AppointmentUpdateTests : AppointmentTestsBase
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
-            controller.Update(InvalidId, invalidTitle, startTime, endTime, Fixture.Create<string>(), AppointmentStatus.Scheduled));
+            controller.Update(InvalidId, updateRequest));
 
         Assert.Equal(ValidationErrorMessage, exception.Message);
     }

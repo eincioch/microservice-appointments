@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Microservice.Appointments.Api.Requests;
 using Microservice.Appointments.Application.Dtos.Appointments;
 using Microservice.Appointments.Domain.Exceptions;
 using Microservice.Appointments.Domain.Models;
@@ -29,17 +30,19 @@ public class AppointmentCreateTests : AppointmentTestsBase
             appointmentDomain.Status
         );
 
-        MockRepository
-            .Setup(repo => repo.AddAsync(It.IsAny<AppointmentDomain>()))
-            .ReturnsAsync(appointmentDomain);
-
-        // Act
-        var response = await controller.Create(
+        var createRequest = new CreateAppointmentRequest(
             appointmentDto.Title,
             appointmentDto.StartTime,
             appointmentDto.EndTime,
             appointmentDto.Description
         );
+
+        MockRepository
+            .Setup(repo => repo.AddAsync(It.IsAny<AppointmentDomain>()))
+            .ReturnsAsync(appointmentDomain);
+
+        // Act
+        var response = await controller.Create(createRequest);
 
         // Assert
         var createdResult = Assert.IsType<CreatedAtActionResult>(response);
@@ -58,13 +61,16 @@ public class AppointmentCreateTests : AppointmentTestsBase
     {
         // Arrange
         var controller = CreateController();
-        var invalidTitle = string.Empty;
-        var startTime = DateTime.UtcNow.AddHours(HoursInFuture);
-        var endTime = DateTime.UtcNow;
+        var invalidRequest = new CreateAppointmentRequest(
+            string.Empty,
+            DateTime.UtcNow.AddHours(HoursInFuture),
+            DateTime.UtcNow,
+            Fixture.Create<string>()
+        );
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<BadRequestException>(() =>
-            controller.Create(invalidTitle, startTime, endTime, Fixture.Create<string>()));
+            controller.Create(invalidRequest));
 
         Assert.Equal(ValidationErrorMessage, exception.Message);
     }
