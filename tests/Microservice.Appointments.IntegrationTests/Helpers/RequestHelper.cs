@@ -13,4 +13,12 @@ public static class RequestHelper
         request.AddHeader(AcceptHeader, ApplicationJson);
         return request;
     }
+
+    public static RestRequest PostRequest<T>(string endpoint, T payload) where T : class
+    {
+        var request = new RestRequest(endpoint, Method.Post);
+        request.AddHeader(AcceptHeader, ApplicationJson);
+        request.AddJsonBody(payload);
+        return request;
+    }
 }

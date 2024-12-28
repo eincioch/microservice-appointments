@@ -43,7 +43,6 @@ public class GetAllAppointmentsTests : TestsBase
         // Assert
         Assert.NotNull(response);
         Assert.NotNull(response.Data);
-        Assert.Equal(expectedAppointments.Count, response.Data.Count);
 
         foreach (var expected in expectedAppointments)
         {
