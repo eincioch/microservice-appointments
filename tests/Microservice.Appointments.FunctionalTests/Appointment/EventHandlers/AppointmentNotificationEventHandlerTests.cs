@@ -51,7 +51,10 @@ public class AppointmentNotificationEventHandlerTests
             appointmentDomain.Id,
             NotificationEventType,
             builder.Fixture.Create<string>(),
-            builder.Fixture.Create<DateTime>()
+            DateTime.UtcNow.AddDays(-1),
+            DateTime.UtcNow.AddDays(1),
+            builder.Fixture.Create<string>(),
+            builder.Fixture.Create<AppointmentStatus>()
         );
 
         builder.MockRepository
@@ -90,7 +93,10 @@ public class AppointmentNotificationEventHandlerTests
             builder.Fixture.Create<int>(),
             NotificationEventType,
             builder.Fixture.Create<string>(),
-            builder.Fixture.Create<DateTime>()
+            builder.Fixture.Create<DateTime>(),
+            builder.Fixture.Create<DateTime>(),
+            builder.Fixture.Create<string>(),
+            builder.Fixture.Create<AppointmentStatus>()
         );
 
         builder.MockRepository
@@ -125,7 +131,10 @@ public class AppointmentNotificationEventHandlerTests
             builder.Fixture.Create<int>(),
             builder.Fixture.Create<string>(),
             builder.Fixture.Create<string>(),
-            builder.Fixture.Create<DateTime>()
+            builder.Fixture.Create<DateTime>(),
+            builder.Fixture.Create<DateTime>(),
+            builder.Fixture.Create<string>(),
+            builder.Fixture.Create<AppointmentStatus>()
         );
 
         var handler = builder.Build();

@@ -43,6 +43,8 @@ public class AppointmentNotificationHandlerTests
             => Fixture.Build<AppointmentNotificationEvent>()
                 .With(e => e.Type, type)
                 .With(e => e.AppointmentId, appointmentId)
+                .With(e => e.StartTime, DateTime.UtcNow.AddDays(-1))
+                .With(e => e.EndTime, DateTime.UtcNow.AddDays(1))
                 .Create();
     }
 

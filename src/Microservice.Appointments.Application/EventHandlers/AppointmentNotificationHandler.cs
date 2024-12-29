@@ -12,21 +12,27 @@ public class AppointmentNotificationHandler(IAppointmentRepository appointmentRe
 
     private const string NotificationEventType = "AppointmentNotificationEvent";
 
-    public async Task HandleAsync(AppointmentNotificationEvent @event, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(AppointmentNotificationEvent apointmentNotificationEvent, CancellationToken cancellationToken = default)
     {
-        if (@event.Type != NotificationEventType)
+        if (apointmentNotificationEvent.Type != NotificationEventType)
             return;
 
-        var appointment = await _appointmentRepository.GetAsync(@event.AppointmentId);
+        var appointment = await _appointmentRepository.GetAsync(apointmentNotificationEvent.AppointmentId);
         if (appointment is null)
         {
-            _logger.LogWarning($"Appointment with ID {@event.AppointmentId} not found.");
+            _logger.LogWarning($"Appointment with ID {apointmentNotificationEvent.AppointmentId} not found.");
             return;
         }
+
+        appointment.Update(apointmentNotificationEvent.Title,
+            apointmentNotificationEvent.StartTime,
+            apointmentNotificationEvent.EndTime,
+            apointmentNotificationEvent.Description,
+            apointmentNotificationEvent.Status);
 
         appointment.MarkNotificationSent();
         await _appointmentRepository.UpdateAsync(appointment);
 
-        _logger.LogInformation($"Notification processed for appointment: {@event.AppointmentId}");
+        _logger.LogInformation($"Notification processed for appointment: {apointmentNotificationEvent.AppointmentId}");
     }
 }
