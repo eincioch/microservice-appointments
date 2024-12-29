@@ -34,6 +34,11 @@ public static class RequestHelper
         return request;
     }
 
+    public static RestRequest DeleteRequest(string endpoint)
+    {
+        var request = CreateRequest(endpoint, Method.Delete);
+        return request;
+    }
 
     private static RestRequest CreateRequest(string endpoint, Method method)
     {

@@ -10,5 +10,6 @@ public class Url
         public static string Post => $"{BaseEndpoint}";
         public static string Put(int id) => $"{BaseEndpoint}/{id}";
         public static string Patch(int id) => $"{BaseEndpoint}/{id}/status";
+        public static string Delete(int id) => $"{BaseEndpoint}/{id}";
     }
 }
