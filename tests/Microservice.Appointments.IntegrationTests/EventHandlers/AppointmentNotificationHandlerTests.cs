@@ -63,7 +63,7 @@ public class AppointmentNotificationHandlerTests : TestsBase
 
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
         Assert.NotNull(getResponse.Data);
-        Assert.Equal("Invalid Event Type", getResponse.Data.Title);
+        Assert.Equal("Notification Invalid Event Type", getResponse.Data.Title);
     }
 
     [Fact]
@@ -88,6 +88,6 @@ public class AppointmentNotificationHandlerTests : TestsBase
 
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
         Assert.NotNull(getResponse.Data);
-        Assert.Equal("Non-updatable Appointment", getResponse.Data.Title);
+        Assert.Equal("Notification Non-updatable Appointment", getResponse.Data.Title);
     }
 }
