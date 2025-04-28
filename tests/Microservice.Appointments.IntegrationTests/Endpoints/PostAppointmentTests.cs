@@ -141,7 +141,7 @@ public class PostAppointmentTests : TestsBase
         // Act
         var response = await Client.ExecuteAsync<AppointmentResponse>(request);
         var receivedEvent = await eventBusHelper.WaitForEventAsync<AppointmentCreatedEvent>(
-x => x.Title == payload.Title && x.StartTime == payload.StartTime
+            x => x.Title == payload.Title && x.StartTime == payload.StartTime
         );
 
         // Assert
@@ -150,9 +150,10 @@ x => x.Title == payload.Title && x.StartTime == payload.StartTime
         Assert.NotNull(receivedEvent);
 
         Assert.Equal(response.Data.Id, receivedEvent!.AppointmentId);
-        Assert.Equal(response.Data.Title, receivedEvent.Title);
-        Assert.Equal(response.Data.StartTime, receivedEvent.StartTime);
-        Assert.Equal(response.Data.EndTime, receivedEvent.EndTime);
-        Assert.Equal(response.Data.Description, receivedEvent.Description);
+
+        Assert.Equal(payload.Title, response.Data.Title);
+        Assert.Equal(payload.StartTime, response.Data.StartTime);
+        Assert.Equal(payload.EndTime, response.Data.EndTime);
+        Assert.Equal(payload.Description, response.Data.Description);
     }
 }
