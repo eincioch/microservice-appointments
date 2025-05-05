@@ -83,7 +83,8 @@ This app keeps things clean, testable, and easy to automate:
 #### **IntegrityAssurance Solution**: 
   1. Open `Microservice.Appointments.IntegrityAssurance.sln`.
   2. Navigate to the `Microservice.Appointments.IntegrationTests` project.
-  3. Ensure the `Microservice.Appointments.Api` is running in **IntegrityAssurance mode**.
+  3. Ensure the `Microservice.Appointments.Api` is running under the profile **IntegrityAssurance**.
+     ![Microservice-Appointments-ProfilePicture](https://github.com/user-attachments/assets/27795093-199b-4578-850b-bb5d554c73c6)
   4. Execute the tests and validate the workflows.
 
 ---
